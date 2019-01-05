@@ -1,0 +1,11 @@
+---
+
+
+# Gather facts
+- import_playbook: tools-gather_facts.yml
+
+- hosts: all
+  tasks:
+
+    - debug:
+        msg: "{{ }}"

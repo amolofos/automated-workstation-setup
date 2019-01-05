@@ -1,0 +1,15 @@
+1. ssh-keygen -t rsa -b 4096 -C "kafetzis.dimitris.andreas@gmail.com"
+
+
+2. 
+  git config --global user.email "kafetzis.dimitris.andreas@gmail.com"
+  git config --global user.name "dkafetzi"
+
+3. apt-get install openssh-server
+
+~/.ssh/authorized_keys
+
+4. https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-18-04
+apt install ansible python-doc python-tk python-crypto-doc python-cryptography-doc python-cryptography-vectors python-enum34-doc python-jinja2-doc python-gssapi python-setuptools-doc python2.7-doc binfmt-support
+
+net-tools

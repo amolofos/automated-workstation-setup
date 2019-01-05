@@ -1,0 +1,90 @@
+---
+
+- name: Create users main group
+  include_role:
+    role: users/group
+  vars:
+    group_definition: { group: "{{ user_definition.group }}",  sudo: false }
+
+- name: Create a login user
+  user:
+    name:             "{{ user_definition.username }}"
+    password:         "{{ user_definition.password }}"
+    update_password:  "{{ user_definition.update_password | default('on_create') }}"
+    group:            "{{ user_definition.group }}"
+    groups:           "{{ user_definition.groups }}"
+    home:             "{{ user_definition.home }}"
+    state:            present
+    shell:            /bin/bash
+    system:           no
+    createhome:       yes
+    append:           yes
+    generate_ssh_key: no
+  when:
+    - manage_users_login
+    - user_definition.type | default(type) == 'login'
+
+- name: Create a system user
+  user:
+    name:             "{{ user_definition.username }}"
+    group:            "{{ user_definition.group }}"
+    groups:           "{{ user_definition.groups }}"
+    home:             "{{ user_definition.home }}"
+    state:            present
+    shell:            /bin/bash
+    system:           yes
+    createhome:       yes
+    append:           yes
+    generate_ssh_key: yes
+  when:
+    - manage_users_system
+    - user_definition.type | default(type) == 'system'
+
+# Setup ssh keys
+- name: Create .ssh directory
+  file:
+    path: "{{ user_definition.home }}/.ssh"
+    state: directory
+    mode: '0600'
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+- name: Create public key
+  copy:
+    src: "{{ loop_item.id_rsa_pub_src }}"
+    dest: "{{ user_definition.home }}/.ssh/{{ loop_item.id_rsa_pub_dest }}"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.username }}"
+    mode: '0600'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+- name: Create private key
+  copy:
+    src: "{{ loop_item.id_rsa_src }}"
+    dest: "{{ user_definition.home }}/.ssh/{{ loop_item.id_rsa_dest }}"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.username }}"
+    mode: '0600'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+# Update PGP
+#GPG_AGENT=$(which gpg-agent)
+#GPG_TTY=`tty`
+#export GPG_TTY
+# 
+#if [ -f ${GPG_AGENT} ]; then
+#    . ~/.bash_gpg
+#fi
+
+# Setup dot files

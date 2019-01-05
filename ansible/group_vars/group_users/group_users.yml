@@ -1,0 +1,20 @@
+---
+
+# Users
+user_group_list:
+  - { group: "admins", gid: "1010", sudo: true }
+  - { group: "users",  gid: "1011", sudo: false }
+
+user_system_list:
+  - type: "system"
+    username: "admin"
+    password: ""
+    group: "admin"
+    groups: "admins"
+    home: "/home/admin"
+    ssh_keys:
+      - name: "default"
+        id_rsa_pub_src: "{{ secret.user.admin.id_rsa_pub_src }}"
+        id_rsa_pub_dest: "{{ secret.user.admin.id_rsa_pub_dest }}"
+        id_rsa_src: "{{ secret.user.admin.id_rsa_src }}"
+        id_rsa_dest: "{{ secret.user.admin.id_rsa_dest }}"

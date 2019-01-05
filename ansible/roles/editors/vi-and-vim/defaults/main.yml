@@ -1,0 +1,7 @@
+vi_and_vim_packages_ubuntu:
+  - vim
+  - vim-nox
+  - xuberant-ctags
+
+vi_and_vim_packages_centos:
+  - vim-enhanced

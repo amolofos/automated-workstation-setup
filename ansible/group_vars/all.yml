@@ -1,0 +1,9 @@
+---
+
+external_protected_secrets_dir: "/opt/protected/ansible-vault"
+external_protected_secrets_env: "workstation"
+external_protected_secrets_file: "vault.yml"
+external_protected_secrets_ext: "yml"
+
+# Editors
+manage_programs_vi_and_vim: true

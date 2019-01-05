@@ -1,0 +1,25 @@
+---
+
+- name: Install system updates for centos systems
+  become: true
+  become_user: root
+  become_method: sudo
+  yum: 
+    name: "{{ item }}" 
+    state: latest 
+  with_items:
+    - "{{ vi_and_vim_packages_centos }}" 
+  when:
+    - ansible_distribution == "CentOS"
+
+- name: Install system updates for ubuntu systems
+  become: true
+  become_user: root
+  become_method: sudo
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+  with_items:
+    - "{{ vi_and_vim_packages_ubuntu }}" 
+  when:
+    - ansible_distribution == "Ubuntu"

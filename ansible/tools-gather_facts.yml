@@ -1,0 +1,9 @@
+---
+
+- name: Gather facts and source external variables
+  hosts: all
+  gather_facts: yes
+  tasks:
+    
+    - include_role:
+        role: misc/gather_facts

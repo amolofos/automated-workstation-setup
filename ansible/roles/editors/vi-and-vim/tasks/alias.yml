@@ -1,0 +1,7 @@
+---
+
+- name: Setup vi and vim alias
+  lineinfile:
+    path: ~/.bash_aliases
+    regexp: '^/s*alias vi'
+    line: 'alias vi=vim'

@@ -1,0 +1,6 @@
+---
+
+manage_users_login: true
+manage_users_system: true
+
+type: system

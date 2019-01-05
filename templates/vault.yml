@@ -1,0 +1,16 @@
+---
+
+secret:
+  user:
+     - login:
+        username: ""
+        password: "{{ secret.user.login.password }}"
+        group: "{{ secret.user.login.group }}"
+        groups: "{{ secret.user.login.groups }}"
+        home: "{{ secret.user.login.home }}"
+    ssh_keys:
+      default:
+        - id_rsa.pub.src: ""
+          id_rsa.pub.dest: ""
+          id_rsa.src: ""
+          id_rsa.dest: ""

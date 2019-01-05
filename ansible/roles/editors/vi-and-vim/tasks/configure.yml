@@ -1,0 +1,5 @@
+---
+
+- name: Dummy task
+  debug:
+    msg: "Dummy"

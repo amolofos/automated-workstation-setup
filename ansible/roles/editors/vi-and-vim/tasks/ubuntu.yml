@@ -1,0 +1,6 @@
+- name: install system updates for ubuntu systems
+  apt: 
+    name: "{{ item }}" 
+    state: latest 
+  with_items:
+    - "{{ vi_and_vim_packages_ubuntu }}" 

@@ -1,0 +1,6 @@
+- name: install system updates for centos systems
+  yum: 
+    name: "{{ item }}" 
+    state: latest 
+  with_items:
+    - "{{ vi_and_vim_packages_centos }}" 

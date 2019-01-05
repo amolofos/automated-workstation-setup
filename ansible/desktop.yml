@@ -1,0 +1,30 @@
+# https://opensource.com/article/18/5/manage-your-workstation-ansible-part-3
+
+- name: Install python-psutil package
+  apt: name=python-psutil
+
+- name: Copy wallpaper file
+  copy: src=files/wallpaper.jpg dest=/home/jay/.wallpaper.jpg owner=jay group=jay mode=600
+
+- name: Set GNOME wallpaper
+  dconf: key="/org/gnome/desktop/background/picture-uri" value="'file:///home/jay/.wallpaper.jpg'"
+
+- name: Copy lockscreenfile
+  copy: src=files/lockscreen.jpg dest=/home/jay/.lockscreen.jpg owner=jay group=jay mode=600
+
+- name: Set lock screen background
+  become_user: jay
+  dconf: key="/org/gnome/desktop/screensaver/picture-uri" value="'file:///home/jay/.lockscreen.jpg'"
+
+
+
+
+
+
+
+  - name: Install arc theme
+  apt: name=arc-theme
+
+  - name: Set GTK theme
+  become_user: jay
+  dconf: key="/org/gnome/desktop/interface/gtk-theme" value="'Arc'"

@@ -1,0 +1,14 @@
+---
+
+- name: Dummy play for now
+  hosts: all
+  tasks:
+
+    - name: Dummy task for now
+      debug:
+        msg: "Setting up browsers."
+
+...
+# Firefox night build
+# Firefox normal
+# Chrome

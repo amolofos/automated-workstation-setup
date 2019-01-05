@@ -1,0 +1,8 @@
+---
+
+user_login_list:
+  - username: "userLogin"
+    password: "dfdfasfs"
+    group: "users"
+    groups: ""
+    type: "login"

@@ -1,0 +1,26 @@
+---
+
+- name: Add group with gid
+  group:
+    name:  "{{ group_definition.group }}"
+    gid:   "{{ group_definition.gid }}"
+    state: present 
+  when:
+    - group_definition.gid is defined
+
+- name: Add group with no gid
+  group:
+    name:  "{{ group_definition.group }}"
+    state: present 
+  when:
+    - group_definition.gid is not defined
+
+- name: Allow group to have passwordless sudo
+  lineinfile:
+    dest:   /etc/sudoers
+    state:  present
+    regexp: "^%{{ group_definition.group }}"
+    line:   "%{{ group_definition.group }} ALL=(ALL) NOPASSWD: ALL"
+    validate: visudo -cf %s
+  when:
+    - group_definition.sudo | default(false) | bool

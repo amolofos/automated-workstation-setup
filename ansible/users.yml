@@ -1,0 +1,28 @@
+---
+
+# users.yml
+# Playbook to create the necessary users. Those will be
+#  * admin
+#    He will have passwordless sudo to root.
+#  * <personal user(s)>
+#    These will be the actual users we want to use for our
+#    daily usage.
+#
+- name: Setup users
+  hosts: group_users
+  become: yes
+  become_user: root
+
+  tasks:
+
+    - include_role:
+        role: users/group
+      vars:
+        group_definition: "{{ item }}"
+      loop: "{{ user_group_list | default([]) }}"
+
+    - include_role:
+        role: users/user
+      vars:
+        user_definition: "{{ item }}"
+      loop: "{{ user_system_list + secret.user_system_list | default([]) }}"

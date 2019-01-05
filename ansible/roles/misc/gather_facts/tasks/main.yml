@@ -1,0 +1,7 @@
+---
+
+- include_vars:
+    file: "{{ external_protected_secrets_dir }}/{{ external_protected_secrets_env }}/{{ external_protected_secrets_file }}"
+    name: secret
+  when:
+    - external_protected_secrets_dir is defined
