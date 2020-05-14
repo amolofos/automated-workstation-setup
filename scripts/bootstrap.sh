@@ -28,15 +28,19 @@ sudo apt-get install -y ansible
 sudo apt-get install -y gpg gpg-agent rng-tools
 
 # Local ansible vault
-PROTECTED_LOCAL_DIR=${PROTECTED_LOCAL_DIR-/opt/openbet/protected}
-ANSIBLE_VAULT_LOCAL_DIR=${ANSIBLE_VAULT_LOCAL-/opt/openbet/protected/ansible-vault}
+PROTECTED_LOCAL_DIR=${PROTECTED_LOCAL_DIR-/opt/protected}
+ANSIBLE_VAULT_LOCAL_DIR=${ANSIBLE_VAULT_LOCAL_DIR-/opt/protected/ansible-vault}
 if [ -z ${ANSIBLE_VAULT_REPO+x} ]; then
 	echo "ANSIBLE_VAULT_REPO is not set, will not checkout any git repository."
 else
-	echo "Clearing /opt/openbet/protected/ansible-vault and checking out ANSIBLE_VAULT_REPO repository."
-	mkdir -p $PROTECTED_LOCAL_DIR
-	rm -rf $ANSIBLE_VAULT_LOCAL_DIR/*
-	git clone ${ANSIBLE_VAULT_REPO} $ANSIBLE_VAULT_LOCAL_DIR/*
+	echo "Clearing /opt/protected/ansible-vault and checking out ANSIBLE_VAULT_REPO repository."
+	sudo mkdir -p $PROTECTED_LOCAL_DIR
+	sudo rm -rf $ANSIBLE_VAULT_LOCAL_DIR/*
+	sudo git clone ${ANSIBLE_VAULT_REPO} $ANSIBLE_VAULT_LOCAL_DIR/*
+
+	echo "Importing public key"
+	sudo gpg --import $ANSIBLE_VAULT_LOCAL_DIR/common/gnupg/workstation.gpg.pub.asc
+	sudo gpg --import $ANSIBLE_VAULT_LOCAL_DIR/common/gnupg/workstation.gpg.asc
 fi
 
 echo "Finished successfully."

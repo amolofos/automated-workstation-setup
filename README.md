@@ -8,7 +8,6 @@ reproducible way.
 Developed and tested against it.
 
 # Project architecture
-
 With this project we are going to install a cron job in a system user which will
 execute periodically and apply the expected state in our system.
 
@@ -16,6 +15,7 @@ This is done briefly by
 * preparing the system
 This is done by one-time scripts, bash and ansible, setting up users, keys and vault secrets.
 * initialising the admin user for one time only
+* scheduled execution using crontab entries
 
 ## Scripts
 Under `scripts` folder, we have some scripts to helps us with some tasks, such as installing
@@ -40,6 +40,9 @@ how these secrets can be setup.
   external_protected_secrets_file: "vault.yml"
   external_protected_secrets_ext: "yml"
   ```
+
+# Execution
+Refer to [README-execution-steps.md](docs/README-execution-steps.md).
 
 # Documentation
 

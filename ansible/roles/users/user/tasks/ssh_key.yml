@@ -1,0 +1,62 @@
+---
+
+- name: Create .ssh directory
+  file:
+    path: "{{ user_definition.home }}/.ssh"
+    state: directory
+    mode: '0700'
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+- name: Create public key
+  copy:
+    src: "{{ loop_item.id_rsa_pub_src }}"
+    dest: "{{ user_definition.home }}/.ssh/{{ loop_item.id_rsa_pub_dest }}"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.username }}"
+    mode: '0644'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+    
+- name: Update permissions of private key to 0644
+  file:
+    path: "{{ loop_item.id_rsa_src }}"
+    mode: '0644'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  changed_when: false
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+- name: Create private key
+  copy:
+    src: "{{ loop_item.id_rsa_src }}"
+    dest: "{{ user_definition.home }}/.ssh/{{ loop_item.id_rsa_dest }}"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.username }}"
+    mode: '0600'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0
+
+- name: Update permissions of private key to 0600
+  file:
+    path: "{{ loop_item.id_rsa_src }}"
+    mode: '0600'
+  loop: "{{  user_definition.ssh_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+  changed_when: false
+  when:
+    - user_definition.home is defined
+    - user_definition.home | length > 0

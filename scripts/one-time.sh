@@ -12,9 +12,9 @@ if [ "$(id -u)" -eq "0" ]; then
 	exit 1
 fi
 
+cd /tmp/
 git clone https://github.com/amolofos/automated-workstation-setup.git amolofos-automated-workstation-setup
 
 cd amolofos-automated-workstation-setup/ansible
 
-sudo su root
-ansible-playbook -i inventory/ 00-provision-one-time.yml
+ansible-playbook 00-provision-one-time.yml

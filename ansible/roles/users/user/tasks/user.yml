@@ -1,0 +1,41 @@
+---
+
+- name: Create users main group
+  include_role:
+    role: users/group
+  vars:
+    group_definition: { group: "{{ user_definition.group }}",  sudo: false }
+
+- name: Create a login user
+  user:
+    name:             "{{ user_definition.username }}"
+    password:         "{{ user_definition.password }}"
+    update_password:  "{{ user_definition.update_password | default('on_create') }}"
+    group:            "{{ user_definition.group }}"
+    groups:           "{{ user_definition.groups }}"
+    home:             "{{ user_definition.home }}"
+    state:            present
+    shell:            /bin/bash
+    system:           no
+    createhome:       yes
+    append:           yes
+    generate_ssh_key: no
+  when:
+    - manage_users_login
+    - user_definition.type | default(type) == 'login'
+
+- name: Create a system user
+  user:
+    name:             "{{ user_definition.username }}"
+    group:            "{{ user_definition.group }}"
+    groups:           "{{ user_definition.groups }}"
+    home:             "{{ user_definition.home }}"
+    state:            present
+    shell:            /bin/bash
+    system:           yes
+    createhome:       yes
+    append:           yes
+    generate_ssh_key: yes
+  when:
+    - manage_users_system
+    - user_definition.type | default(type) == 'system'
