@@ -1,0 +1,43 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# {{ ansible_managed }}
+#
+# This script is to be executed as a cron job that will update the workstation
+# based on the ansible scripts.
+# Tasks:
+#   * Checkout the workstation git repository or update it if it already exists.
+#   * Checkout the valult git repository or update it if it already exists.
+#   * Execute the ansible playbook.
+#
+# -----------------------------------------------------------------------------
+set -uxo pipefail
+
+AUTOMATED_WORKSTATION_NAME={{ automated_workstation_name }}
+AUTOMATED_WORKSTATION_REPOSITORY={{ automated_workstation_repository }}
+AUTOMATED_WORKSTATION_REPOSITORY_LOCAL_DIR={{ automated_workstation_repository_local_dir }}
+AUTOMATED_WORKSTATION_SECRETS_REPOSITORY={{ automated_workstation_secrets_repository }}
+AUTOMATED_WORKSTATION_SECRETS_LOCAL_DIR={{ automated_workstation_secrets_local_dir }}
+
+# 1. Checkout scripts repository.
+if [ -f ${AUTOMATED_WORKSTATION_REPOSITORY_LOCAL_DIR} ]; then
+	# If it exists, reset to master branch and update.
+	cd $AUTOMATED_WORKSTATION_REPOSITORY_LOCAL_DIR
+	git fetch origin master && git reset --hard origin/master && git clean -f -d
+else
+	# If it does not exist, fetch a fresh copy.
+	git clone $AUTOMATED_WORKSTATION_REPOSITORY $AUTOMATED_WORKSTATION_REPOSITORY_LOCAL_DIR
+fi
+
+# 2. Checkout secrets repository.
+if [ ! -z ${AUTOMATED_WORKSTATION_SECRETS_REPOSITORY+x} ]; then
+	if [ -f ${AUTOMATED_WORKSTATION_SECRETS_LOCAL_DIR} ]; then
+		cd $AUTOMATED_WORKSTATION_SECRETS_LOCAL_DIR
+		git fetch origin master && git reset --hard origin/master && git clean -f -d
+	else
+		git clone $AUTOMATED_WORKSTATION_SECRETS_REPOSITORY $AUTOMATED_WORKSTATION_SECRETS_LOCAL_DIR
+	fi
+fi
+
+# 3. Execute the playbook.
+cd $AUTOMATED_WORKSTATION_REPOSITORY_LOCAL_DIR
+ansible-playbook 01-provision-all.yml

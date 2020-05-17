@@ -1,0 +1,7 @@
+---
+
+# Gather facts
+- import_playbook: tools-gather_facts.yml
+
+# Install users
+- import_playbook: users.yml

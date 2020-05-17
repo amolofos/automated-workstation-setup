@@ -6,15 +6,36 @@ user_group_list:
   - { group: "users",  gid: "1011", sudo: false }
 
 user_system_list:
-  - type: "system"
+  - type:     "system"
     username: "admin"
-    password: ""
-    group: "admin"
-    groups: "admins"
+    group:    "admin"
+    groups:
+      - "admins"
     home: "/home/admin"
+    directories:
+      - { "name": "scripts",     path: "/home/admin/.scripts",         mode: '0700' }
+      - { "name": "workstation", path: "/opt/automated_workstation",   mode: '0700' }
+      - { "name": "protected",   path: "/opt/protected/ansible-vault", mode: '0700' }
     ssh_keys:
-      - name: "default"
-        id_rsa_pub_src: "{{ secret.user.admin.id_rsa_pub_src }}"
+      - id: "default"
+        id_rsa_pub_src:  "{{ secret.user.admin.id_rsa_pub_src }}"
         id_rsa_pub_dest: "{{ secret.user.admin.id_rsa_pub_dest }}"
-        id_rsa_src: "{{ secret.user.admin.id_rsa_src }}"
-        id_rsa_dest: "{{ secret.user.admin.id_rsa_dest }}"
+        id_rsa_src:      "{{ secret.user.admin.id_rsa_src }}"
+        id_rsa_dest:     "{{ secret.user.admin.id_rsa_dest }}"
+    gpg:
+      # 604800 seconds = 7 days
+      setup_agent:       true
+      default_cache_ttl: 604800
+      max_cache_ttl:     604800
+    cron:
+      - id:   "ansible_periodic_execution"
+        name: "Automated workstation setup"
+        setup: true
+        mode: "script"
+        #mode: "pull"
+        #job: "source ~/.bash_profile; /usr/bin/ansible-pull -o -U {{ automated_workstation_repository }} 2>&1 | /usr/bin/logger -t '$USER:AUTOMATED_WORKSTATION_SETUP_PULL: '"
+        # Set it up to run once a day, at lunch time so we have time to fix things before the eod.
+        month:  "*"
+        day:    "*"
+        hour:   "13"
+        minute: "0"

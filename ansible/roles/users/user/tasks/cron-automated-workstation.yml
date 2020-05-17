@@ -1,0 +1,53 @@
+# -----------------------------------------------------------------------------
+# Handle cron configuration for our users.
+# -----------------------------------------------------------------------------
+---
+
+- name: Setup pull based periodic execution of the automated workstation playbook
+  cron:
+    user: "{{ user_definition.username }}"
+    name: "{{ loop_item.name | default(cron.ansible_periodic_execution.name) }}"
+    job:  "{{ loop_item.job  | default(cron.ansible_periodic_execution.job_pull) }}"
+    month:  "{{ loop_item.month  | default(cron.ansible_periodic_execution.month) }}"
+    day:    "{{ loop_item.day    | default(cron.ansible_periodic_execution.day) }}"
+    hour:   "{{ loop_item.hour   | default(cron.ansible_periodic_execution.hour) }}"
+    minute: "{{ loop_item.minute | default(cron.ansible_periodic_execution.minute) }}"
+  when:
+    - loop_item.id == 'ansible_periodic_execution'
+    - loop_item.setup | default(cron.ansible_periodic_execution.setup) | bool
+    - loop_item.mode  | default(cron.ansible_periodic_execution.mode) == 'pull'
+  loop: "{{ user_definition.cron | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+
+- name: Setup script for the periodical execution of the automated workstation cron job
+  template:
+    src:   "ansible-automated-workstation.sh.j2"
+    dest:  "{{ user_definition.home }}/.scripts/ansible-automated-workstation.sh"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.group }}"
+    mode:  '0700'
+  when:
+    - loop_item.id == 'ansible_periodic_execution'
+    - loop_item.setup | default(cron.ansible_periodic_execution.setup) | bool
+    - loop_item.mode  | default(cron.ansible_periodic_execution.mode) == 'script'
+  loop: "{{ user_definition.cron | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+
+- name: Setup script based periodic execution of the automated workstation playbook
+  cron:
+    user: "{{ user_definition.username }}"
+    name: "{{ loop_item.name | default(cron.ansible_periodic_execution.name) }}"
+    job:  "{{ loop_item.job  | default(cron.ansible_periodic_execution.job_script) }}"
+    month:  "{{ loop_item.month  | default(cron.ansible_periodic_execution.month) }}"
+    day:    "{{ loop_item.day    | default(cron.ansible_periodic_execution.day) }}"
+    hour:   "{{ loop_item.hour   | default(cron.ansible_periodic_execution.hour) }}"
+    minute: "{{ loop_item.minute | default(cron.ansible_periodic_execution.minute) }}"
+  when:
+    - loop_item.id == 'ansible_periodic_execution'
+    - loop_item.setup | default(cron.ansible_periodic_execution.setup) | bool
+    - loop_item.mode  | default(cron.ansible_periodic_execution.mode) == 'script'
+  loop: "{{ user_definition.cron | default([]) }}"
+  loop_control:
+    loop_var: loop_item

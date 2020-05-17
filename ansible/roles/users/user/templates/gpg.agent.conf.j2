@@ -1,0 +1,7 @@
+# -----------------------------------------------------------------------------
+# {{ ansible_managed }}
+# -----------------------------------------------------------------------------
+default-cache-ttl {{ user_definition.gpg.default_cache_ttl | default(gpg.default_cache_ttl) }}
+pinentry-program /usr/local/bin/pinentry
+no-grab
+max-cache-ttl {{ user_definition.gpg.max_cache_ttl | default(gpg.max_cache_ttl) }}

@@ -1,18 +1,26 @@
 ---
-  
-- include: user.yml
+
+- include: common.yml
+  when:
+    - manage_users | bool
+
+- include: gpg.yml
+  when:
+    - manage_users | bool
+    - user_definition.gpg is defined
+    - user_definition.gpg.setup_agent | default(gpg.setup_agent) | bool
 
 - include: ssh_key.yml
+  when:
+    - manage_users | bool
+    - user_definition.ssh_keys is defined
 
+- include: cron-automated-workstation.yml
+  when:
+    - manage_users | bool
+    - user_definition.cron is defined
 
-
-# Update PGP
-#GPG_AGENT=$(which gpg-agent)
-#GPG_TTY=`tty`
-#export GPG_TTY
-# 
-#if [ -f ${GPG_AGENT} ]; then
-#    . ~/.bash_gpg
-#fi
-
-# Setup dot files
+- include: cron-others.yml
+  when:
+    - manage_users | bool
+    - user_definition.cron is defined

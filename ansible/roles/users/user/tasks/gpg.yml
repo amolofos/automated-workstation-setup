@@ -1,0 +1,52 @@
+# -----------------------------------------------------------------------------
+# Setting up gpg.
+#
+# The gpg-agent is based on https://benincosa.com/?p=3235 blog.
+# What does the setup do?
+#   * It adds a hook into user's bashrc to start a gpg-agent
+#   * When a new shell is opened, a new agent is started if one is not already running
+#   * The new gpg-agent is configured to cache any decrypted values for
+# Right now the default-cache-ttl is set to 600 or 10 minutes.
+# This means that the first time we are going to run `/opt/protected/ansible-vault/vault_pass.sh`
+# it will ask us for the pgp password and will cache it. In the next run,
+# it won’t ask for the password again.
+#
+# -----------------------------------------------------------------------------
+---
+
+- name: Create ~/.gpg.bashrc
+  template:
+    src:   gpg.bashrc.j2
+    dest:  "{{ user_definition.home }}/.gpg.bashrc"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.group }}"
+    mode:  '0600'
+
+# We need to store
+- name: Append to ~/.bash_profile
+  blockinfile:
+    path:         "{{ user_definition.home }}/.bash_profile"
+    marker:       "# {mark}: Automated workstation setup - gpg user setup."
+    marker_begin: "Begin"
+    marker_end:   "End"
+    block: |
+      GPG_AGENT=$(which gpg-agent)
+      GPG_TTY=`tty`
+      SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+      export GPG_TTY SSH_AUTH_SOCK
+
+      if [ -f ${GPG_AGENT} ]; then
+          . ~/.gpg.bashrc
+      fi
+    create: yes
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.group }}"
+    mode:  '0600'
+
+- name: Create ~/.gnupg/gpg-agent.conf
+  template:
+    src:   gpg.agent.conf.j2
+    dest:  "{{ user_definition.home }}/.gnupg/gpg-agent.conf"
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.group }}"
+    mode:  '0600'

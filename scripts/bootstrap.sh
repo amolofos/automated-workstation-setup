@@ -2,45 +2,29 @@
 
 set -uxo pipefail
 
-if [ "$(id -u)" -eq "0" ]; then
-	apt-get install -y sudo
-fi
+#if ! command -v sudo >/dev/null 2>&1; then
+#	>&2 echo "This script requires 'sudo' binary to be installed"
+#	exit 1
+#fi
+#
+#if [ "$(id -u)" -eq "0" ]; then
+#	>&2 echo "This script must be run as normal user"
+#	exit 1
+#fi
 
-if ! command -v sudo >/dev/null 2>&1; then
-	>&2 echo "This script requires 'sudo' binary to be installed"
-	exit 1
-fi
+AUTOMATED_WORKSTATION_NAME=${AUTOMATED_WORKSTATION_NAME-workstation}
+AUTOMATED_WORKSTATION_REPOSITORY=${AUTOMATED_WORKSTATION_REPOSITORY-https://github.com/amolofos/automated-workstation-setup.git}
+AUTOMATED_WORKSTATION_LOCAL_DIR=${AUTOMATED_WORKSTATION_LOCAL_DIR-/tmp/automated_workstation}
+AUTOMATED_WORKSTATION_SECRETS_DIR=${AUTOMATED_WORKSTATION_SECRETS_DIR-/opt/protected/ansible-vault}
+AUTOMATED_WORKSTATION_SECRETS_FILE=${AUTOMATED_WORKSTATION_SECRETS_FILE-vault.yml}
 
-sudo apt-get install -y software-properties-common
+#cd /tmp/
+#rm -rf $AUTOMATED_WORKSTATION_LOCAL_DIR
+#git clone $AUTOMATED_WORKSTATION_REPOSITORY $AUTOMATED_WORKSTATION_LOCAL_DIR
+#
+#cd $AUTOMATED_WORKSTATION_LOCAL_DIR/ansible
 
-sudo add-apt-repository --yes --update ppa:deadsnakes/ppa
-sudo apt-get update
-sudo apt-get install -y python3.6
-sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
-sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
-sudo update-alternatives --set python /usr/bin/python3.6
-
-sudo apt-add-repository --yes --update ppa:ansible/ansible
-sudo apt-get update
-sudo apt-get install -y ansible
-
-# PGP
-sudo apt-get install -y gpg gpg-agent rng-tools
-
-# Local ansible vault
-PROTECTED_LOCAL_DIR=${PROTECTED_LOCAL_DIR-/opt/protected}
-ANSIBLE_VAULT_LOCAL_DIR=${ANSIBLE_VAULT_LOCAL_DIR-/opt/protected/ansible-vault}
-if [ -z ${ANSIBLE_VAULT_REPO+x} ]; then
-	echo "ANSIBLE_VAULT_REPO is not set, will not checkout any git repository."
-else
-	echo "Clearing /opt/protected/ansible-vault and checking out ANSIBLE_VAULT_REPO repository."
-	sudo mkdir -p $PROTECTED_LOCAL_DIR
-	sudo rm -rf $ANSIBLE_VAULT_LOCAL_DIR/*
-	sudo git clone ${ANSIBLE_VAULT_REPO} $ANSIBLE_VAULT_LOCAL_DIR/*
-
-	echo "Importing public key"
-	sudo gpg --import $ANSIBLE_VAULT_LOCAL_DIR/common/gnupg/workstation.gpg.pub.asc
-	sudo gpg --import $ANSIBLE_VAULT_LOCAL_DIR/common/gnupg/workstation.gpg.asc
-fi
-
-echo "Finished successfully."
+ansible-playbook -vvvv 00-provision-bootstrap.yml \
+	-e "external_protected_secrets_dir=$AUTOMATED_WORKSTATION_SECRETS_DIR" \
+	-e "external_protected_secrets_env=$AUTOMATED_WORKSTATION_NAME" \
+	-e "external_protected_secrets_file=$AUTOMATED_WORKSTATION_SECRETS_FILE"

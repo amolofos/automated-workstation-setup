@@ -1,6 +1,36 @@
 ---
 
-manage_users_login: true
+manage_users:        true
 manage_users_system: true
+manage_users_login:  true
 
 type: system
+
+gpg:
+  setup_agent: false
+  # 600 seconds = 10 minutes
+  default_cache_ttl: 600
+  # 172800 seconds = 2 days
+  max_cache_ttl: 172800
+
+cron:
+  # Special cronjob to use its default values.
+  default:
+    name: "Cron test1"
+    setup: false
+    job: "echo Default"
+    month:        ""
+    day:          ""
+    hour:         ""
+    minute:       ""
+    special_time: "reboot"
+  ansible_periodic_execution:
+    name: "Automated workstation setup"
+    setup: false
+    mode: "pull"
+    job_pull: "source ~/.bash_profile; /usr/bin/ansible-pull -o -U {{ automated_workstation_repository }} 2>&1 | /usr/bin/logger -t '$USER:AUTOMATED_WORKSTATION_SETUP_PULL: '"
+    job_script: "source ~/.bash_profile; ~/.scripts/ansible-automated-workstation.sh 2>&1 | /usr/bin/logger -t '$USER:AUTOMATED_WORKSTATION_SETUP_SCRIPT: '"
+    month:  "*"
+    day:    "*"
+    hour:   "13"
+    minute: "0"

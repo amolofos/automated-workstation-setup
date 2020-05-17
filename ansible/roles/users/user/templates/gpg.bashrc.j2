@@ -1,9 +1,10 @@
+# -----------------------------------------------------------------------------
+# {{ ansible_managed }}
+#
 # This is based in https://benincosa.com/?p=3235
-envfile="${HOME}/.gnupg/gpg-agent.env"
- 
-if test -f "$envfile" && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
-    eval "$(cat "$envfile")"
-else
-    eval "$(gpg-agent --daemon --log-file=~/.gpg/gpg.log --write-env-file "$envfile")"
+# -----------------------------------------------------------------------------
+gpg_socket="${HOME}/.gnupg/S.gpg-agent"
+
+if [ ! -S gpg_socket ]; then
+	eval "$(gpgconf --launch gpg-agent)"
 fi
-export GPG_AGENT_INFO  # the env file does not contain the export statement

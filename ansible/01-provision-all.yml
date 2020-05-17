@@ -1,20 +1,17 @@
 ---
 
-# Gather facts
-- import_playbook: tools-gather_facts.yml
+- import_playbook: 00-provision-bootstrap.yml
 
 ## Install packages
 #- import_playbook: essentials.yml
-
+#
 ## Configure applications
 #- import_playbook: editors.yml
 #- import_playbook: source-control.yml
 #- import_playbook: browsers.yml
-
+#
 ## Install dot files
 #- import_playbook: dotfiles.yml
 #
 ## Configure desktop
 #- import_playbook: desktop.yml
-
-# Setup ansible config for admin user.

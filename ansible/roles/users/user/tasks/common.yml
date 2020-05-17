@@ -21,7 +21,7 @@
     append:           yes
     generate_ssh_key: no
   when:
-    - manage_users_login
+    - manage_users_login | bool
     - user_definition.type | default(type) == 'login'
 
 - name: Create a system user
@@ -37,5 +37,17 @@
     append:           yes
     generate_ssh_key: yes
   when:
-    - manage_users_system
+    - manage_users_system | bool
     - user_definition.type | default(type) == 'system'
+
+- name: Create user directories
+  file:
+    path:  "{{ loop_item.path }}"
+    state: directory
+    owner: "{{ user_definition.username }}"
+    group: "{{ user_definition.group }}"
+    mode:  "{{ loop_item.mode }}"
+    recurse: true
+  loop: "{{ user_definition.directories | default([]) }}"
+  loop_control:
+    loop_var: loop_item

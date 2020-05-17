@@ -25,11 +25,11 @@ usermod -aG sudo <username>
 We need to have specific files storing secrets in the local machine. See [README-secrets.md](docs/README-secrets.md)
 file for details and a poc on how these secrets can be setup. The following are expected
   * /opt/protected/ansible-vault/vault_pass.sh
-  * /opt/protected/ansible-vault/<workstation>/vault.yml encrypted (or not, depends on you)
+  * /opt/protected/ansible-vault/<workstation>/vault.yml encrypted (or not, depends on you :) )
 
 ## First run
 
-* Bootstrap
+* One time scripts
 Note that this will clone locally the git repository that stores the ansible vault.
 In order to do that, the ANSIBLE_VAULT_REPO environment variable should be set to the expected git
 repository.
@@ -38,7 +38,7 @@ repository.
   ```bash
   # Replase the git repo below with yours.
   export ANSIBLE_VAULT_REPO=https://github.com/amolofos/automated-workstation-ansible-vault-template.git
-  curl https://raw.githubusercontent.com/amolofos/automated-workstation-setup/master/scripts/bootstrap.sh | bash
+  curl https://raw.githubusercontent.com/amolofos/automated-workstation-setup/master/scripts/one-time.sh | bash
   ```
   * Execute them locally
   ```bash
@@ -52,22 +52,24 @@ repository.
   # We should have python3 installed and ansible. These are covered by the following
   # script. It requires sudo priviledges.
   cd amolofos-automated-workstation-setup
-  ./scripts/bootstrap.sh
+  ./scripts/one-time.sh
   ```
 
-* One time scripts
+* Bootstrap scripts
+This needs to run using a user with root passwordless access.
   * Automated run
   ```bash
-  curl https://raw.githubusercontent.com/amolofos/automated-workstation-setup/master/scripts/one-time.sh | bash
+  curl https://raw.githubusercontent.com/amolofos/automated-workstation-setup/master/scripts/bootstrap.sh | bash
   ```
   * Execute them locally
   ```bash
+  sudo su - root
   # Checkout the repository
   git clone https://github.com/amolofos/automated-workstation-setup.git amolofos-automated-workstation-setup
 
   cd amolofos-automated-workstation-setup/ansible
 
-  sudo ./scripts/one-time.sh
+  ./scripts/bootstrap.sh
   ```
 
 ## Subsequent runs

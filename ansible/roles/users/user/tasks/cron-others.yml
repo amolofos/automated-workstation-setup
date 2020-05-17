@@ -1,0 +1,35 @@
+# -----------------------------------------------------------------------------
+# Handle cron configuration for our users.
+# -----------------------------------------------------------------------------
+---
+
+- name: Setup any other defined cron entries based on time
+  cron:
+    user: "{{ user_definition.username }}"
+    name: "{{ loop_item.name | default(cron.default.name) }}"
+    job:  "{{ loop_item.job  | default(cron.default.job) }}"
+    month:  "{{ loop_item.month        | default(cron.default.month) }}"
+    day:    "{{ loop_item.day          | default(cron.default.day) }}"
+    hour:   "{{ loop_item.hour         | default(cron.default.hour) }}"
+    minute: "{{ loop_item.minute       | default(cron.default.minute) }}"
+  when:
+    - loop_item.id != 'ansible_periodic_execution'
+    - loop_item.setup | default(cron.default.setup) | bool
+    - loop_item.special_time is not defined
+  loop: "{{ user_definition.cron | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+
+- name: Setup any other defined cron entries based on special_time
+  cron:
+    user: "{{ user_definition.username }}"
+    name: "{{ loop_item.name | default(cron.default.name) }}"
+    job:  "{{ loop_item.job  | default(cron.default.job) }}"
+    special_time: "{{ loop_item.special_time | default(cron.default.special_time) }}"
+  when:
+    - loop_item.id != 'ansible_periodic_execution'
+    - loop_item.setup | default(cron.default.setup) | bool
+    - loop_item.special_time is defined
+  loop: "{{ user_definition.cron | default([]) }}"
+  loop_control:
+    loop_var: loop_item
