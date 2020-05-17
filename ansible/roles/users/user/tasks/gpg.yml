@@ -11,6 +11,8 @@
 # it will ask us for the pgp password and will cache it. In the next run,
 # it won’t ask for the password again.
 #
+# The gpg import tasks are based on https://github.com/onaio/ansible-gpg-import/blob/master/tasks/main.yaml.
+#
 # -----------------------------------------------------------------------------
 ---
 
@@ -53,6 +55,8 @@
 
 
 - name: Make sure the GPG config exists
+  become: yes
+  become_user: "{{ user_definition.username }}"
   shell: >
     gpg --list-keys
   args:
@@ -61,6 +65,8 @@
     - user_definition.gpg.keys is defined
 
 - name: Import public key
+  become: yes
+  become_user: "{{ user_definition.username }}"
   shell: >
     gpg --import {{ loop_item.file }}
   when:
@@ -70,6 +76,8 @@
     loop_var: loop_item
 
 - name: Import private key
+  become: yes
+  become_user: "{{ user_definition.username }}"
   shell: >
     gpg --allow-secret-key-import --batch --passphrase="{{ loop_item.passphrase }}" --import {{ loop_item.file }}
   register: gpg_private_key_import_status
