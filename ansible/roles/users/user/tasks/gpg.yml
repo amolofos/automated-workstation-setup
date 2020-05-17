@@ -50,3 +50,32 @@
     owner: "{{ user_definition.username }}"
     group: "{{ user_definition.group }}"
     mode:  '0600'
+
+
+- name: Make sure the GPG config exists
+  shell: >
+    gpg --list-keys
+  args:
+    creates: "{{ user_definition.home }}/.gnupg"
+  when:
+    - user_definition.gpg.keys is defined
+
+- name: Import public key
+  shell: >
+    gpg --import {{ loop_item.file }}
+  when:
+    - loop_item.type == "public"
+  loop: "{{ user_definition.gpg_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item
+
+- name: Import private key
+  shell: >
+    gpg --allow-secret-key-import --batch --passphrase="{{ loop_item.passphrase }}" --import {{ loop_item.file }}
+  register: gpg_private_key_import_status
+  ignore_errors: true
+  when:
+    - loop_item.type == "private"
+  loop: "{{ user_definition.gpg_keys | default([]) }}"
+  loop_control:
+    loop_var: loop_item

@@ -27,6 +27,7 @@ user_system_list:
       setup_agent:       true
       default_cache_ttl: 604800
       max_cache_ttl:     604800
+    gpg_keys: "{{ secret.user.admin.gpg_keys }}"
     cron:
       - id:   "ansible_periodic_execution"
         name: "Automated workstation setup"
