@@ -2,6 +2,8 @@
 # {{ ansible_managed }}
 # -----------------------------------------------------------------------------
 default-cache-ttl {{ user_definition.gpg.default_cache_ttl | default(gpg.default_cache_ttl) }}
-pinentry-program /usr/bin/pinentry
-no-grab
 max-cache-ttl {{ user_definition.gpg.max_cache_ttl | default(gpg.max_cache_ttl) }}
+no-grab
+
+# Setup a different ui to request the passphrase.
+#pinentry-program /usr/bin/pinentry

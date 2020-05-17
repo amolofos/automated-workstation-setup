@@ -87,3 +87,10 @@
   loop: "{{ user_definition.gpg_keys | default([]) }}"
   loop_control:
     loop_var: loop_item
+
+# Let's kill gpg so it will reload with any new configuration
+- name: Stop gpg-agent
+  become: yes
+  become_user: "{{ user_definition.username }}"
+  shell: >
+    gpgconf --kill all
