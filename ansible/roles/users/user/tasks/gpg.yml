@@ -33,12 +33,12 @@
     marker_end:   "End"
     block: |
       GPG_AGENT=$(which gpg-agent)
-      GPG_TTY=`tty`
+      GPG_TTY=$(tty)
       SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
       export GPG_TTY SSH_AUTH_SOCK
 
       if [ -f ${GPG_AGENT} ]; then
-          . ~/.gpg.bashrc
+        . ~/.gpg.bashrc
       fi
     create: yes
     owner: "{{ user_definition.username }}"
@@ -52,7 +52,6 @@
     owner: "{{ user_definition.username }}"
     group: "{{ user_definition.group }}"
     mode:  '0600'
-
 
 - name: Make sure the GPG config exists
   become: yes
@@ -74,19 +73,19 @@
   loop: "{{ user_definition.gpg_keys | default([]) }}"
   loop_control:
     loop_var: loop_item
+  no_log: true
 
 - name: Import private key
   become: yes
   become_user: "{{ user_definition.username }}"
   shell: >
     gpg --allow-secret-key-import --batch --passphrase="{{ loop_item.passphrase }}" --import {{ loop_item.file }}
-  register: gpg_private_key_import_status
-  ignore_errors: true
   when:
     - loop_item.type == "private"
   loop: "{{ user_definition.gpg_keys | default([]) }}"
   loop_control:
     loop_var: loop_item
+  no_log: true
 
 # Let's kill gpg so it will reload with any new configuration
 - name: Stop gpg-agent

@@ -28,8 +28,8 @@ cron:
     name: "Automated workstation setup"
     setup: false
     mode: "pull"
-    job_pull: "source ~/.bash_profile; /usr/bin/ansible-pull -o -U {{ automated_workstation_repository }} 2>&1 | /usr/bin/logger -t '$USER:AUTOMATED_WORKSTATION_SETUP_PULL: '"
-    job_script: "source ~/.bash_profile; ~/.scripts/ansible-automated-workstation.sh 2>&1 | /usr/bin/logger -t '$USER:AUTOMATED_WORKSTATION_SETUP_SCRIPT: '"
+    job_pull: "source ~/.bash_profile; /usr/bin/ansible-pull -o -U {{ automated_workstation_repository }} 2>&1 | /usr/bin/logger -t \"$USER:AUTOMATED_WORKSTATION_SETUP_PULL: \""
+    job_script: "source ~/.bash_profile; ~/.scripts/ansible-automated-workstation.sh 2>&1 | /usr/bin/logger -t \"$USER:AUTOMATED_WORKSTATION_SETUP_SCRIPT: \"'"
     month:  "*"
     day:    "*"
     hour:   "13"

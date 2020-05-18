@@ -5,6 +5,6 @@
 # -----------------------------------------------------------------------------
 gpg_socket="${HOME}/.gnupg/S.gpg-agent"
 
-if [ ! -S gpg_socket ]; then
+if [ ! -S $gpg_socket ]; then
 	eval "$(gpgconf --launch gpg-agent)"
 fi

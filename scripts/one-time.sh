@@ -40,10 +40,11 @@ else
 	sudo git clone ${AUTOMATED_WORKSTATION_ANSIBLE_VAULT_REPO} $AUTOMATED_WORKSTATION_SECRETS_DIR/*
 
 	echo "Importing gpg encryption keys"
-	if [[ -f "$AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/$AUTOMATED_WORKSTATION_NAME.gpg.pub.asc" ]];
+	if [ -f "$AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/$AUTOMATED_WORKSTATION_NAME.gpg.pub.asc" ]; then
 		sudo gpg --import $AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/$AUTOMATED_WORKSTATION_NAME.gpg.pub.asc
 	fi
-	if [[ -f "$AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/workstation.gpg.asc" ]];
+
+	if [ -f "$AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/workstation.gpg.asc" ]; then
 		sudo gpg --import $AUTOMATED_WORKSTATION_SECRETS_DIR/common/gnupg/$AUTOMATED_WORKSTATION_NAME.gpg.asc
 	fi
 fi
