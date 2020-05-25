@@ -1,6 +1,11 @@
 ---
 
 # Users
+manage_users:        true
+manage_users_system: true
+manage_users_login:  true
+
+# Users
 user_group_list:
   - { group: "admins", gid: "1010", sudo: true }
   - { group: "users",  gid: "1011", sudo: false }

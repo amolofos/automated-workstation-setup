@@ -1,17 +1,18 @@
 ---
 
-- import_playbook: 00-provision-bootstrap.yml
+- import_playbook: tools-gather_facts.yml
 
-## Install packages
-#- import_playbook: essentials.yml
-#
+- import_playbook: users.yml
+
+- import_playbook: system-localisation.yml
+
+- import_playbook: system-package_manager.yml
+
 ## Configure applications
 #- import_playbook: editors.yml
 #- import_playbook: source-control.yml
 #- import_playbook: browsers.yml
-#
-## Install dot files
-#- import_playbook: dotfiles.yml
-#
+
+
 ## Configure desktop
 #- import_playbook: desktop.yml

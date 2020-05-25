@@ -1,0 +1,9 @@
+---
+
+- name: Allow 'admin' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%{{ admins_group_name }}"
+    line: "%{{ admins_group_name }} ALL=(ALL) NOPASSWD: ALL"
+    validate: 'visudo -cf %s'

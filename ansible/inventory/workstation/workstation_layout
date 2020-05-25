@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Fundamental groups
-# 
+#
 # Basic groups that point to specific ips. They are blank here but are
 # defined inside the inventory.
 # -----------------------------------------------------------------------------
@@ -12,4 +12,7 @@
 # -----------------------------------------------------------------------------
 
 [group_users:children]
+workstation
+
+[group_system:children]
 workstation

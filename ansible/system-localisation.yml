@@ -1,0 +1,19 @@
+---
+
+- name: Setup localisation
+  hosts: group_system
+
+  tasks:
+
+    - include_role:
+        role: system/locale
+      vars:
+        system_locale: "{{ secret.config.system.locale | default(config.system.locale) }}"
+        system_language: "{{ secret.config.system.language | default(config.system.language) }}"
+
+    - name: Set timezone
+      timezone:
+        name: "{{ secret.config.system.timezone | default(config.system.timezone) }}"
+
+    # TODO:
+    # Install ntp package

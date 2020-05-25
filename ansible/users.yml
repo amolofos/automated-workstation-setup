@@ -26,3 +26,9 @@
       vars:
         user_definition: "{{ item }}"
       loop: "{{ user_system_list + secret.user_system_list | default([]) }}"
+
+
+
+# TODO:
+#  * dot files.
+#    Time zone per user https://www.cyberciti.biz/faq/howto-linux-set-time-zone-per-user-basis/

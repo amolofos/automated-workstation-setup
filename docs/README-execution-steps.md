@@ -87,7 +87,7 @@ repository locally and execute `00-provision-bootstrap.yml` playbook with the va
 
   cd amolofos-automated-workstation-setup/ansible
 
-  ./scripts/bootstrap.sh
+  ../scripts/bootstrap.sh
   ```
 
 ## Subsequent runs

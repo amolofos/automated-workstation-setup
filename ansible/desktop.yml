@@ -18,13 +18,16 @@
 
 
 
-
-
-
-
-  - name: Install arc theme
+- name: Install arc theme
   apt: name=arc-theme
 
   - name: Set GTK theme
   become_user: jay
   dconf: key="/org/gnome/desktop/interface/gtk-theme" value="'Arc'"
+
+
+# Disable gnome keyring
+https://github.com/MichaelAquilina/ubuntu-ansible/blob/master/roles/ubuntu/tasks/gpg.yml
+
+# Keyboard layout
+https://github.com/gantsign/ansible-role-keyboard

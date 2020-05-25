@@ -1,5 +1,6 @@
 ---
 
+# External dependencies.
 automated_workstation_name:                 "{{ secret.automated_workstation_name }}"
 automated_workstation_repository:           "{{ secret.automated_workstation_repository }}"
 automated_workstation_repository_local_dir: "{{ secret.automated_workstation_repository_local_dir }}"
@@ -10,11 +11,3 @@ external_protected_secrets_dir:  "{{ automated_workstation_secrets_local_dir }}"
 external_protected_secrets_env:  "{{ automated_workstation_name }}"
 external_protected_secrets_file: "vault.yml"
 external_protected_secrets_ext:  "yml"
-
-# List important configuration in one place
-manage_users:        true
-manage_users_system: true
-manage_users_login:  true
-
-# Editors
-manage_programs_vi_and_vim: true
