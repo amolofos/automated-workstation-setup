@@ -1,0 +1,12 @@
+---
+
+- name: Install latest version of software
+  become: yes
+  apt:
+    pkg: "{{ loop_item }}"
+    state: latest
+    update_cache: yes
+    cache_valid_time: "{{ cache_valid_time | default(cache_valid_time_default) }}"
+  loop: "{{ software_list | default(software_list_default) }}"
+  loop_control:
+    loop_var: loop_item

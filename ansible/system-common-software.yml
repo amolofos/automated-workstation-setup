@@ -1,0 +1,12 @@
+---
+
+- name: Setup common software
+  hosts: group_system
+  tasks:
+
+    - include_role:
+        role: system/software
+      vars:
+        action: install_latest
+        cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
+        software_list: "{{ secret.config.software.common_list | default(config.software.common_list) }}"

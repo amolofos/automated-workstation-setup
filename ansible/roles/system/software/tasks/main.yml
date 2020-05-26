@@ -1,0 +1,10 @@
+---
+
+- assert:
+    that:
+      - action is defined
+      - action in action_valid_options
+    fail_msg: "'action' parameter is not defined"
+    quiet: true
+
+- include: "{{ action }}.yml"

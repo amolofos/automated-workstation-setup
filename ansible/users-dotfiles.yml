@@ -1,0 +1,9 @@
+---
+
+- name: Setup dotfiles
+  hosts: group_system
+  tasks:
+
+    - name: "TODO: dotfiles"
+      debug:
+        msg: "TODO: dotfiles"
