@@ -1,0 +1,39 @@
+---
+
+- name: Make sure necessary repositories are available
+  become: yes
+  apt_repository:
+    repo: ppa:linuxuprising/java
+    state: present
+  when:
+    # We need to add the extra repository only when we are installing modules
+    # that are provided by them.
+    - '"oracle" in software_list | default(software_list_default) | string'
+
+- include_role:
+    name: system/software
+  vars:
+    action: update_cache
+  when:
+    - '"oracle" in software_list | default(software_list_default) | string'
+
+- name: Accept oracle license
+  become: yes
+  debconf:
+    name: "{{ loop_item }}"
+    question: "{{ java.oracle_license[loop_item] }}"
+    value: "true"
+    vtype: "select"
+  when:
+    - java.oracle_license is defined
+    - '"oracle" in loop_item'
+  loop: "{{ software_list | default(software_list_default) }}"
+  loop_control:
+    loop_var: loop_item
+
+# TODO:
+#  * Create the /var/cache/oracle-jdk11-installer-local/ directory
+#  * Copy the jdk-11.0.6_linux-x64_bin.tar.gz file to the above directory
+#    Note that this file needs to be manually downloaded from oracle's
+#    website and stored inside ansible repository.
+# Install software

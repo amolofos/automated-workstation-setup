@@ -1,0 +1,5 @@
+---
+
+action_valid_options:
+  - install
+  - install_latest

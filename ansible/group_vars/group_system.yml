@@ -38,3 +38,13 @@ config:
       - wget
       - whois
       - zip
+    java:
+      - default-jdk
+      - default-jre
+      - openjdk-11-jdk
+      - openjdk-8-jdk
+    java_alternative_location: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+
+    #python:
+#
+    #go:

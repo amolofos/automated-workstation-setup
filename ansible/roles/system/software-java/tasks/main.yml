@@ -1,0 +1,27 @@
+---
+
+- assert:
+    that:
+      - action is defined
+      - action in action_valid_options
+    fail_msg: "'action' parameter is not defined"
+    quiet: true
+
+# See why in https://www.linuxuprising.com/2019/06/new-oracle-java-11-installer-for-ubuntu.html.
+# In case someone wants to install oracle automatically, see oracle.yml
+- assert:
+    that:
+      - '"oracle" not in software_list | default(software_list_default) | string'
+    fail_msg: "oracle java packages can no longer be automatically installed"
+    quiet: true
+
+# No need to pass any variables. They are already defined by the caller.
+- include_role:
+    name: system/software
+
+- name: Set java alternatives
+  alternatives:
+    name: java
+    path: "{{ secret.config.software.java_alternative_location | default(config.software.java_alternative_location) }}"
+  when:
+    - secret.config.software.java_alternative_location is defined or config.software.java_alternative_location is defined
