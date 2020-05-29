@@ -10,6 +10,7 @@ config:
     cache_time: 3600
   software:
     common_list:
+      - ansible
       - build-essential
       - curl
       - bzip2
@@ -21,11 +22,15 @@ config:
       - gzip
       - htop
       - less
+      - libffi-dev
+      - libssl-dev
       - make
       - nano
       - nmap
       - openssl
       - p7zip
+      # Neeed by ansible
+      - python3-apt
       - pwgen
       - rsync
       - software-properties-common
@@ -44,7 +49,22 @@ config:
       - openjdk-11-jdk
       - openjdk-8-jdk
     java_alternative_location: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
-
-    #python:
-#
-    #go:
+    python:
+      - build-essential
+      - libssl-dev
+      - libffi-dev
+      - python2.7
+      - python2.7-dev
+      - python3-apt
+      - python3.6
+      - python3.6-dev
+      - python3.6-distutils
+      - python3.6-venv
+      - python3.9
+      - python3.9-dev
+      - python3.9-distutils
+      - python3.9-venv
+    python_repositories:
+      - "ppa:deadsnakes/ppa"
+    # Ansible complains about python3-apt when run using 3.9.
+    python_alternative_location: "/usr/bin/python3.6"

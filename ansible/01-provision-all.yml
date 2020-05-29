@@ -4,11 +4,13 @@
 
 - import_playbook: users.yml
 
-- import_playbook: system-localisation.yml
+- import_playbook: system-common.yml
 
-- import_playbook: system-package_manager.yml
+- import_playbook: software-common.yml
 
-- import_playbook: system-common-software.yml
+- import_playbook: software-extra.yml
+
+- import_playbook: software-development.yml
 
 
 - import_playbook: users-dotfiles.yml

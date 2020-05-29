@@ -1,6 +1,6 @@
 ---
 
-- name: Setup localisation
+- name: Setup essentials
   hosts: group_system
   tasks:
 
@@ -16,3 +16,8 @@
 
     # TODO:
     # Install ntp package
+
+    - include_role:
+        role: system/package_manager
+      vars:
+        cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"

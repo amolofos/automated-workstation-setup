@@ -1,0 +1,21 @@
+---
+
+- name: Setup extra software
+  hosts: group_system
+  tasks:
+
+    - name: "TODO"
+      debug:
+        msg: "TODO"
+
+# Meld
+# Geany
+# Libreoffice
+
+# Firefox
+# Chrome
+# Virtualbox
+# Teamviewer
+
+# Skype
+# Teams

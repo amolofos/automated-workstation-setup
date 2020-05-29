@@ -1,0 +1,14 @@
+---
+
+- assert:
+    that:
+      - name is defined
+      - path is defined
+    fail_msg: "'name' or 'path' parameters are not defined"
+    quiet: true
+
+- name: "Set '{{ name }}' alternatives"
+  become: yes
+  alternatives:
+    name: "{{ name }}"
+    path: "{{ path }}"

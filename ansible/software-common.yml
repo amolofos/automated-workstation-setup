@@ -28,3 +28,5 @@
         software_list: "{{ secret.config.software.python | default(config.software.python) }}"
       when:
         - secret.config.software.python is defined or config.software.python is defined
+
+# Vim and neoVim

@@ -3,5 +3,3 @@
 action_valid_options:
   - install
   - install_latest
-  - update_cache
-  - configure_alternative

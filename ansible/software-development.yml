@@ -1,0 +1,37 @@
+---
+
+- name: Setup development software
+  hosts: group_system
+  tasks:
+
+    - name: "TODO"
+      debug:
+        msg: "TODO"
+
+# VsCode
+# Git
+# tmux
+# openssh-server
+
+# Docker
+# Vagrant
+
+# Pip packages
+# Go
+# Rust
+# NodeJs
+
+# Ansible
+# Nomad
+# Vault
+# Consul
+# Terraform
+# Kubernetes
+# memcached
+# mysql
+# sqlite
+
+# AWS
+# GCP
+# Azure
+# Openshift

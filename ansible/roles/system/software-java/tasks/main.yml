@@ -19,8 +19,10 @@
 - include_role:
     name: system/software
 
-- name: Set java alternatives
-  alternatives:
+- include_role:
+    name: system/software
+  vars:
+    action: configure_alternative
     name: java
     path: "{{ secret.config.software.java_alternative_location | default(config.software.java_alternative_location) }}"
   when:

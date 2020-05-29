@@ -13,6 +13,7 @@ fi
 
 sudo apt-get install -y software-properties-common
 
+# Use 3.6 for now since 3.9 complains about python3-apt package.
 sudo add-apt-repository --yes --update ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install -y python3.6
