@@ -4,18 +4,50 @@
   hosts: group_system
   tasks:
 
-    - name: "TODO"
-      debug:
-        msg: "TODO"
+    - set_fact:
+        distribution_key_list: "{{ secret.config.software.extra_list_repositories_keys.debian | default(config.software.extra_list_repositories_keys.debian) }}"
+      when:
+        - secret.config.software.extra_list_repositories_keys is defined or config.software.extra_list_repositories_keys is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-# Meld
-# Geany
-# Libreoffice
+    - set_fact:
+        distribution_repo_list: "{{ secret.config.software.extra_list_repositories.debian | default(config.software.extra_list_repositories.debian) }}"
+      when:
+        - secret.config.software.extra_list_repositories is defined or config.software.extra_list_repositories is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - set_fact:
+        distribution_extra_list: "{{ secret.config.software.extra_list.debian | default(config.software.extra_list.debian)  }}"
+      when:
+        - secret.config.software.extra_list is defined or config.software.extra_list is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_key
+        url: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_key_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
+
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_repository
+        repo: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_repo_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
+
+    - include_role:
+        role: system/software
+      vars:
+        action: install_latest
+        cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
+        software_list: "{{ distribution_extra_list | default([]) }}"
+
 
 # Firefox
-# Chrome
-# Virtualbox
-# Teamviewer
-
-# Skype
-# Teams

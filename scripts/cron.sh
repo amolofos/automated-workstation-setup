@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -uxo pipefail
+
 AUTOMATED_WORKSTATION_NAME=${AUTOMATED_WORKSTATION_NAME-workstation}
 AUTOMATED_WORKSTATION_REPOSITORY=${AUTOMATED_WORKSTATION_REPOSITORY-https://github.com/amolofos/automated-workstation-setup.git}
 AUTOMATED_WORKSTATION_LOCAL_DIR=${AUTOMATED_WORKSTATION_LOCAL_DIR-/tmp/automated_workstation}

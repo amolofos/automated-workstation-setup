@@ -1,0 +1,8 @@
+---
+
+- name: Add repository
+  apt_repository:
+    repo: "{{ repo }}"
+    state: "{{ state }}"
+    update_cache: yes
+    validate_certs: no

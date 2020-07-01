@@ -6,25 +6,16 @@
 # -----------------------------------------------------------------------------
 ---
 
-- name: Ensure the system can use the HTTPS transport for APT
-  register: apt_https_transport
-  stat:
-    path: "/usr/lib/apt/methods/https"
+- assert:
+    that:
+      - action is defined
+      - action in action_valid_options
+    fail_msg: "'action' parameter is not defined"
+    quiet: true
 
-- name: Install HTTPS transport for APT
-  apt:
-    pkg: apt-transport-https
-    state: installed
+- include: "{{ action }}-debian.yml"
   when:
-    - not apt_https_transport.stat.exists
-
-- name: Enable all repositories in sources.list
-  become: yes
-  replace:
-    path: /etc/apt/sources.list
-    regexp: '^#\s?deb(.+)http://(.+)/ubuntu(.+)$'
-    replace: 'deb\1http://\2/ubuntu\3'
-    backup: yes
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - include_role:
     name: system/software

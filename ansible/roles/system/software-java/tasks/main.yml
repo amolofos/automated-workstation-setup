@@ -19,11 +19,6 @@
 - include_role:
     name: system/software
 
-- include_role:
-    name: system/software
-  vars:
-    action: configure_alternative
-    name: java
-    path: "{{ secret.config.software.java_alternative_location | default(config.software.java_alternative_location) }}"
+- include: debian.yml
   when:
-    - secret.config.software.java_alternative_location is defined or config.software.java_alternative_location is defined
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

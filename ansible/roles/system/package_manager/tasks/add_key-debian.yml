@@ -1,0 +1,7 @@
+---
+
+- name: Install apt key
+  become: yes
+  apt_key:
+    url: "{{ url }}"
+    state: "{{ state }}"

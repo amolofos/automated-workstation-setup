@@ -1,0 +1,10 @@
+---
+
+- include_role:
+    name: system/software
+  vars:
+    action: configure_alternative
+    name: python
+    path: "{{ secret.config.software.python_alternative_location.debian | default(config.software.python_alternative_location.debian) }}"
+  when:
+    - secret.config.software.python_alternative_location.debian is defined or config.software.python_alternative_location.debian is defined

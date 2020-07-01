@@ -7,26 +7,14 @@
     fail_msg: "'action' parameter is not defined"
     quiet: true
 
-- name: Make sure necessary repositories are available
-  become: yes
-  apt_repository:
-    repo: "{{ loop_item }}"
-    state: present
+- include: pre-install-debian.yml
   when:
-    - secret.config.software.python_repositories is defined or config.software.python_repositories is defined
-  loop: "{{ secret.config.software.python_repositories | default(config.software.python_repositories) }}"
-  loop_control:
-    loop_var: loop_item
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 # No need to pass any variables. They are already defined by the caller.
 - include_role:
     name: system/software
 
-- include_role:
-    name: system/software
-  vars:
-    action: configure_alternative
-    name: python
-    path: "{{ secret.config.software.python_alternative_location | default(config.software.python_alternative_location) }}"
+- include: post-install-debian.yml
   when:
-    - secret.config.software.python_alternative_location is defined or config.software.python_alternative_location is defined
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

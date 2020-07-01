@@ -4,29 +4,78 @@
   hosts: group_system
   tasks:
 
+    - set_fact:
+        distribution_key_list: "{{ secret.config.software.common_list_repositories_keys.debian | default(config.software.common_list_repositories_keys.debian) }}"
+      when:
+        - secret.config.software.common_list_repositories_keys is defined or config.software.common_list_repositories_keys is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - set_fact:
+        distribution_repo_list: "{{ secret.config.software.common_list_repositories.debian | default(config.software.common_list_repositories.debian) }}"
+      when:
+        - secret.config.software.common_list_repositories is defined or config.software.common_list_repositories is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - set_fact:
+        distribution_common_list: "{{ secret.config.software.common_list.debian | default(config.software.common_list.debian) }}"
+      when:
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - set_fact:
+        java_software_list: "{{ secret.config.software.java.debian | default(config.software.java.debian) }}"
+      when:
+        - secret.config.software.java is defined or config.software.java is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - set_fact:
+        python_software_list: "{{ secret.config.software.python.debian | default(config.software.python.debian) }}"
+      when:
+        - secret.config.software.python is defined or config.software.python is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_key
+        url: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_key_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
+
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_repository
+        repo: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_repo_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
+
     - include_role:
         role: system/software
       vars:
         action: install_latest
         cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
-        software_list: "{{ secret.config.software.common_list | default(config.software.common_list) }}"
+        software_list: "{{ distribution_common_list | default([]) }}"
+      when:
+        - distribution_common_list is defined
 
     - include_role:
         role: system/software-java
       vars:
         action: install_latest
         cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
-        software_list: "{{ secret.config.software.java | default(config.software.java) }}"
+        software_list: "{{ java_software_list | default([]) }}"
       when:
-        - secret.config.software.java is defined or config.software.java is defined
+        - java_software_list is defined
 
     - include_role:
         role: system/software-python
       vars:
         action: install_latest
         cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
-        software_list: "{{ secret.config.software.python | default(config.software.python) }}"
+        software_list: "{{ python_software_list | default([]) }}"
       when:
-        - secret.config.software.python is defined or config.software.python is defined
-
-# Vim and neoVim
+        - python_software_list is defined

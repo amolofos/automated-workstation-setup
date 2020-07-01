@@ -1,0 +1,6 @@
+---
+
+action_valid_options:
+  - configure
+  - add_key
+  - add_repository

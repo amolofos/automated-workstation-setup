@@ -20,4 +20,5 @@
     - include_role:
         role: system/package_manager
       vars:
+        action: configure
         cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"

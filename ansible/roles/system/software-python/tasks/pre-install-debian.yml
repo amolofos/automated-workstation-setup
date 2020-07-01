@@ -1,0 +1,12 @@
+---
+
+- name: Make sure necessary repositories are available
+  become: yes
+  apt_repository:
+    repo: "{{ loop_item }}"
+    state: present
+  when:
+    - secret.config.software.python_repositories.debian is defined or config.software.python_repositories.debian is defined
+  loop: "{{ secret.config.software.python_repositories.debian | default(config.software.python_repositories.debian) }}"
+  loop_control:
+    loop_var: loop_item

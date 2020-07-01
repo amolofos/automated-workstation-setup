@@ -9,62 +9,105 @@ config:
   package_manager:
     cache_time: 3600
   software:
+    common_list_repositories:
+      debian:
+        - "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    common_list_repositories_keys:
+      debian:
+        - https://dl-ssl.google.com/linux/linux_signing_key.pub
     common_list:
-      - ansible
-      - build-essential
-      - curl
-      - bzip2
-      - colortest
-      - diffutils
-      - gcc
-      - git
-      - grep
-      - gzip
-      - htop
-      - less
-      - libffi-dev
-      - libssl-dev
-      - make
-      - nano
-      - nmap
-      - openssl
-      - p7zip
-      # Neeed by ansible
-      - python3-apt
-      - pwgen
-      - rsync
-      - software-properties-common
-      - sshfs
-      - sshpass
-      - tar
-      - tmux
-      - unzip
-      - vim
-      - wget
-      - whois
-      - zip
+      debian:
+        - ansible
+        - build-essential
+        - curl
+        - bzip2
+        - colortest
+        - diffutils
+        - google-chrome-stable
+        - grep
+        - gzip
+        - htop
+        - less
+        - libffi-dev
+        - libssl-dev
+        - nano
+        - nmap
+        - openssl
+        - p7zip
+        # Neeed by Ansible 2.9.
+        - python3-apt
+        - rsync
+        - software-properties-common
+        - tar
+        - unzip
+        - vim
+        - wget
+        - whois
+        - zip
+    extra_list_repositories:
+      debian:
+        - "deb http://linux.teamviewer.com/deb stable main"
+        - "deb [arch=amd64] https://repo.skype.com/deb stable main"
+        - "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main"
+        # This causes issues for the time being since
+        # the ansible module does not have the option
+        # to answer yes, i.e. -y switch of the
+        # apt-add-repository.
+        #- "ppa:libreoffice/ppa"
+    extra_list_repositories_key:
+      debian:
+        - "https://repo.skype.com/data/SKYPE-GPG-KEY"
+        - "https://packages.microsoft.com/keys/microsoft.asc"
+    extra_list:
+      debian:
+        - geany
+        - gir1.2-gtksource-3.0
+        - intltool
+        - itstool
+        - libreoffice
+        - libxml2-utils
+        - make
+        - meld
+        - pwgen
+        - skypeforlinux
+        - sshfs
+        - sshpass
+        - teamviewer
+        - teams
+        - teams-insiders
+        - tmux
+        - tree
+    development_list:
+      debian:
+        - gcc
+        - git
     java:
-      - default-jdk
-      - default-jre
-      - openjdk-11-jdk
-      - openjdk-8-jdk
-    java_alternative_location: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+      debian:
+        - default-jdk
+        - default-jre
+        - openjdk-11-jdk
+        - openjdk-8-jdk
+    java_alternative_location:
+      debian: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
     python:
-      - build-essential
-      - libssl-dev
-      - libffi-dev
-      - python2.7
-      - python2.7-dev
-      - python3-apt
-      - python3.6
-      - python3.6-dev
-      - python3.6-distutils
-      - python3.6-venv
-      - python3.9
-      - python3.9-dev
-      - python3.9-distutils
-      - python3.9-venv
+      debian:
+        - build-essential
+        - libssl-dev
+        - libffi-dev
+        - python2.7
+        - python2.7-dev
+        - python3-apt
+        - python3.6
+        - python3.6-dev
+        - python3.6-distutils
+        - python3.6-venv
+        - python3.9
+        - python3.9-dev
+        - python3.9-distutils
+        - python3.9-venv
     python_repositories:
-      - "ppa:deadsnakes/ppa"
+      debian:
+        - "ppa:deadsnakes/ppa"
     # Ansible complains about python3-apt when run using 3.9.
-    python_alternative_location: "/usr/bin/python3.6"
+    python_alternative_location:
+      debian: "/usr/bin/python3.6"
