@@ -48,6 +48,3 @@
         action: install_latest
         cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
         software_list: "{{ distribution_extra_list | default([]) }}"
-
-
-# Firefox

@@ -4,36 +4,47 @@
   hosts: group_system
   tasks:
 
-    - name: "TODO"
-      debug:
-        msg: "TODO"
+    - set_fact:
+        distribution_key_list: "{{ secret.config.software.development_list_repositories_keys.debian | default(config.software.development_list_repositories_keys.debian) }}"
+      when:
+        - secret.config.software.development_list_repositories_keys is defined or config.software.development_list_repositories_keys is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-# VsCode
-# Git
-# tmux
-# openssh-server
+    - set_fact:
+        distribution_repo_list: "{{ secret.config.software.development_list_repositories.debian | default(config.software.development_list_repositories.debian) }}"
+      when:
+        - secret.config.software.development_list_repositories is defined or config.software.development_list_repositories is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-# Virtualbox
+    - set_fact:
+        distribution_development_list: "{{ secret.config.software.development_list.debian | default(config.software.development_list.debian)  }}"
+      when:
+        - secret.config.software.development_list is defined or config.software.development_list is defined
+        - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-# Docker
-# Vagrant
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_key
+        url: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_key_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
 
-# Pip packages
-# Go
-# Rust
-# NodeJs
+    - include_role:
+        role: system/package_manager
+      vars:
+        action: add_repository
+        repo: "{{ loop_item }}"
+        state: present
+      loop: "{{ distribution_repo_list | default([]) }}"
+      loop_control:
+        loop_var: loop_item
 
-# Ansible
-# Nomad
-# Vault
-# Consul
-# Terraform
-# Kubernetes
-# memcached
-# mysql
-# sqlite
-
-# AWS
-# GCP
-# Azure
-# Openshift
+    - include_role:
+        role: system/software
+      vars:
+        action: install_latest
+        cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"
+        software_list: "{{ distribution_development_list | default([]) }}"

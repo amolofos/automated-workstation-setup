@@ -6,6 +6,7 @@
     path: "/usr/lib/apt/methods/https"
 
 - name: Install HTTPS transport for APT
+  become: yes
   apt:
     pkg: apt-transport-https
     state: installed

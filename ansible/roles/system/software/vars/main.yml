@@ -5,3 +5,5 @@ action_valid_options:
   - install_latest
   - update_cache
   - configure_alternative
+  - autoremove
+  - update_dist

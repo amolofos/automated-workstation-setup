@@ -4,8 +4,5 @@
   hosts: all
   tasks:
 
-    - debug:
-        var: ansible_distribution
-
     - include_role:
         role: misc/gather_facts

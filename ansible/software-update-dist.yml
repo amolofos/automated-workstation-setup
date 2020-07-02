@@ -1,0 +1,11 @@
+---
+
+- name: Update distribution
+  hosts: group_system
+  tasks:
+
+    - include_role:
+        role: system/software
+      vars:
+        action: update_dist
+        cache_valid_time: "{{ secret.config.package_manager.cache_time | default(config.package_manager.cache_time) }}"

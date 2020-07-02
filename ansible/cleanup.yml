@@ -1,0 +1,10 @@
+---
+
+- name: Setup common software
+  hosts: group_system
+  tasks:
+
+    - include_role:
+        role: system/software
+      vars:
+        action: autoremove

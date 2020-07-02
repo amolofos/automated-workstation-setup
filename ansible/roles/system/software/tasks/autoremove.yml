@@ -1,0 +1,7 @@
+---
+
+- name: Cleanup not needed software
+  become: yes
+  apt:
+    autoremove: yes
+    purge: yes

@@ -57,6 +57,26 @@ Refer to [README-execution-steps.md](docs/README-execution-steps.md).
   * [0002 Ansible - do not use local connections](docs/architecture/decisions/0002-ansible-do-not-use-local-connections.md)
   * [0003 Storing secrets](docs/architecture/decisions/0003-storing-secrets.md)
 
+# TODO
+  [] Design a cleaner way of using values defined by this repo and the values
+  defined in the secret
+  [] Software
+    [] Go
+    [] Rust
+    [] TeX (https://github.com/wtanaka/ansible-role-latex/)
+    [] Alternatives for neovim (https://github.com/neovim/neovim/wiki/Installing-Neovim)
+    [] Docker
+    [] Nomad
+    [] Vault
+    [] Consul
+    [] Terraform
+    [] Kubernetes
+    [] AWS
+    [] GCP
+    [] Azure
+    [] Openshift
+  [] Dot files
+
 # License
 The license of this repository and the work that the committers have added into is MIT.
 However, it should be noted that some parts have been based on other projects and on

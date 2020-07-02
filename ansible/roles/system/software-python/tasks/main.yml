@@ -18,3 +18,14 @@
 - include: post-install-debian.yml
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install pip packages
+  become: yes
+  pip:
+    name: "{{ loop_item }}"
+    state: latest
+  loop: "{{ secret.config.software.python.pip | default(config.software.python.pip) }}"
+  loop_control:
+    loop_var: loop_item
+  when:
+    - secret.config.software.python.pip is defined or config.software.python.pip is defined

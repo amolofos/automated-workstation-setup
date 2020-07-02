@@ -1,10 +1,9 @@
 ---
 
-- name: Install latest version of software
+- name: Install latest version of the distribution
   become: yes
   apt:
-    pkg: "{{ software_list | default(software_list_default) }}"
-    state: latest
+    upgrade: dist
     update_cache: yes
     cache_valid_time: "{{ cache_valid_time | default(cache_valid_time_default) }}"
     force_apt_get: yes

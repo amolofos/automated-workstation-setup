@@ -1,6 +1,7 @@
 ---
 
 - name: Add repository
+  become: yes
   apt_repository:
     repo: "{{ repo }}"
     state: "{{ state }}"

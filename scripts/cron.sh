@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -uxo pipefail
+set -euxo pipefail
+
+../scripts/dependencies-ansible.sh
 
 AUTOMATED_WORKSTATION_NAME=${AUTOMATED_WORKSTATION_NAME-workstation}
 AUTOMATED_WORKSTATION_REPOSITORY=${AUTOMATED_WORKSTATION_REPOSITORY-https://github.com/amolofos/automated-workstation-setup.git}

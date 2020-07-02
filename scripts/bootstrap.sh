@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -uxo pipefail
+set -euxo pipefail
 
 #if ! command -v sudo >/dev/null 2>&1; then
 #	>&2 echo "This script requires 'sudo' binary to be installed"
@@ -11,6 +11,8 @@ set -uxo pipefail
 #	>&2 echo "This script must be run as normal user"
 #	exit 1
 #fi
+
+../scripts/dependencies-ansible.sh
 
 AUTOMATED_WORKSTATION_NAME=${AUTOMATED_WORKSTATION_NAME-workstation}
 AUTOMATED_WORKSTATION_REPOSITORY=${AUTOMATED_WORKSTATION_REPOSITORY-https://github.com/amolofos/automated-workstation-setup.git}

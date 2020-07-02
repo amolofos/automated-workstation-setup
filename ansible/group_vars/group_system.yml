@@ -9,12 +9,14 @@ config:
   package_manager:
     cache_time: 3600
   software:
-    common_list_repositories:
-      debian:
-        - "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     common_list_repositories_keys:
       debian:
         - https://dl-ssl.google.com/linux/linux_signing_key.pub
+    common_list_repositories:
+      debian:
+        - "ppa:mozillateam/ppa"
+        - "ppa:neovim-ppa/unstable"
+        - "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     common_list:
       debian:
         - ansible
@@ -23,19 +25,25 @@ config:
         - bzip2
         - colortest
         - diffutils
+        - firefox-esr
+        - git
         - google-chrome-stable
+        - graphviz
         - grep
         - gzip
         - htop
         - less
         - libffi-dev
-        - libssl-dev
+        - libgraphviz-dev
         - nano
+        - neovim
         - nmap
         - openssl
         - p7zip
         # Neeed by Ansible 2.9.
+        - python-neovim
         - python3-apt
+        - python3-neovim
         - rsync
         - software-properties-common
         - tar
@@ -44,8 +52,20 @@ config:
         - wget
         - whois
         - zip
+    extra_list_repositories_key:
+      debian:
+        # Firefox daily key
+        - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xb34505ea326feaea07e3618def4186fe247510be"
+        # Firefox next version key
+        #- "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0ab215679c571d1c8325275b9bdb3d89ce49ec21"
+        - "https://repo.skype.com/data/SKYPE-GPG-KEY"
+        - "https://packages.microsoft.com/keys/microsoft.asc"
     extra_list_repositories:
       debian:
+        # Next development version
+        - "ppa:mozillateam/firefox-next"
+        # Daily builds
+        #- "ppa:ubuntu-mozilla-daily/ppa"
         - "deb http://linux.teamviewer.com/deb stable main"
         - "deb [arch=amd64] https://repo.skype.com/deb stable main"
         - "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main"
@@ -54,19 +74,15 @@ config:
         # to answer yes, i.e. -y switch of the
         # apt-add-repository.
         #- "ppa:libreoffice/ppa"
-    extra_list_repositories_key:
-      debian:
-        - "https://repo.skype.com/data/SKYPE-GPG-KEY"
-        - "https://packages.microsoft.com/keys/microsoft.asc"
     extra_list:
       debian:
+        - firefox
         - geany
         - gir1.2-gtksource-3.0
         - intltool
         - itstool
         - libreoffice
         - libxml2-utils
-        - make
         - meld
         - pwgen
         - skypeforlinux
@@ -77,10 +93,51 @@ config:
         - teams-insiders
         - tmux
         - tree
+    development_list_repositories_keys:
+      debian:
+        # VSCode
+        - "https://packages.microsoft.com/keys/microsoft.asc"
+        # Virtualbox
+        - "https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+    development_list_repositories:
+      debian:
+        # VSCode
+        - "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+        # Virtualbox
+        - "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib"
     development_list:
       debian:
+        - autoconf
+        - automake
+        - cmake
+        - g++
         - gcc
-        - git
+        - gettext
+        - libcurl4-gnutls-dev
+        - libexpat1-dev
+        - libghc-zlib-dev
+        - libmemcached-tools
+        - libncurses5-dev
+        - libtool
+        - make
+        - memcached
+        - mysql-server
+        - nodejs
+        - npm
+        - openssh-server
+        - pandoc
+        - pkg-config
+        - sqlite3
+        - sqlitebrowser
+        - tmux
+        - vagrant
+        - virtualbox-6.0
+        #- virtualbox-ext-pack
+        # - virtualbox-guest-additions-iso
+        #- virtualbox-guest-utils
+        - virtualbox-guest-x11
+        - xorg-video-abi-23
+        - xserver-xorg-core
     java:
       debian:
         - default-jdk
@@ -91,11 +148,9 @@ config:
       debian: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
     python:
       debian:
-        - build-essential
-        - libssl-dev
-        - libffi-dev
         - python2.7
         - python2.7-dev
+        - python-pip
         - python3-apt
         - python3.6
         - python3.6-dev
@@ -105,6 +160,26 @@ config:
         - python3.9-dev
         - python3.9-distutils
         - python3.9-venv
+        - python3-pip
+      pip:
+        - Bottleneck
+        - ipython[notebook]
+        - matplotlib
+        - networkx
+        # We get the following error
+        # ERROR: Could not find a version that satisfies the requirement nymphy (from versions: none)
+        #- nymphy
+        - numexpr
+        - pandas
+        - pip
+        - pygraphviz
+        - requests
+        - scipy
+        - scikit-learn
+        - setuptools
+        - sympy
+        - xmltodict
+        - wheel
     python_repositories:
       debian:
         - "ppa:deadsnakes/ppa"
