@@ -75,6 +75,7 @@ Refer to [README-execution-steps.md](docs/README-execution-steps.md).
     [] GCP
     [] Azure
     [] Openshift
+    [] https://multipass.run/
   [] Dot files
 
 # License

@@ -132,12 +132,13 @@ config:
         - tmux
         - vagrant
         - virtualbox-6.0
-        #- virtualbox-ext-pack
+        # - virtualbox-ext-pack
         # - virtualbox-guest-additions-iso
-        #- virtualbox-guest-utils
+        # - virtualbox-guest-utils
         - virtualbox-guest-x11
-        - xorg-video-abi-23
-        - xserver-xorg-core
+        # Did this break my Ubuntu 18.04?
+        # - xorg-video-abi-23
+        # - xserver-xorg-core
     java:
       debian:
         - default-jdk
