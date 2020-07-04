@@ -66,6 +66,7 @@
 - name: Import public key
   become: yes
   become_user: "{{ user_definition.username }}"
+  register: import_public_key_logs
   shell: >
     gpg --import {{ loop_item.file }}
   when:
@@ -74,10 +75,13 @@
   loop_control:
     loop_var: loop_item
   no_log: true
+  changed_when:
+    - "'secret keys changed' in import_public_key_logs.stderr"
 
 - name: Import private key
   become: yes
   become_user: "{{ user_definition.username }}"
+  register: import_private_key_logs
   shell: >
     gpg --allow-secret-key-import --batch --passphrase="{{ loop_item.passphrase }}" --import {{ loop_item.file }}
   when:
@@ -86,6 +90,8 @@
   loop_control:
     loop_var: loop_item
   no_log: true
+  changed_when:
+    - "'secret keys changed' in import_private_key_logs.stderr"
 
 # Let's kill gpg so it will reload with any new configuration
 - name: Stop gpg-agent
@@ -93,3 +99,5 @@
   become_user: "{{ user_definition.username }}"
   shell: >
     gpgconf --kill all
+  # This will always kiil the agent. Let's not clutter our output.
+  changed_when: false

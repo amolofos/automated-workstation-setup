@@ -132,13 +132,7 @@ config:
         - tmux
         - vagrant
         - virtualbox-6.0
-        # - virtualbox-ext-pack
-        # - virtualbox-guest-additions-iso
-        # - virtualbox-guest-utils
         - virtualbox-guest-x11
-        # Did this break my Ubuntu 18.04?
-        # - xorg-video-abi-23
-        # - xserver-xorg-core
     java:
       debian:
         - default-jdk
@@ -179,6 +173,7 @@ config:
         - scikit-learn
         - setuptools
         - sympy
+        - testresources
         - xmltodict
         - wheel
     python_repositories:

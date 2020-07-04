@@ -7,3 +7,5 @@
   apt:
     update_cache: yes
     cache_valid_time: "{{ cache_valid_time | default(cache_valid_time_default) }}"
+  # Let's not clutter the output.
+  changed_when: false
