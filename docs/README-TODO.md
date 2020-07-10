@@ -28,3 +28,7 @@
       [] MikeTex
       [] ssh keys
   [] Dot files
+    [] VS code
+      * Line ending to be LF
+      * Add new line at the end of the file
+      * tab default size to be 2.
