@@ -1,0 +1,32 @@
+---
+
+- name: Adding repository key
+  include: add_key.yml
+  vars:
+    url: "{{ key }}"
+    state: "present"
+  loop:
+    "{{ keys | default([]) | list }}"
+  loop_control:
+    loop_var: key
+
+- name: Adding repository
+  include: add_repository.yml
+  vars:
+    repo: "{{ repository }}"
+    state: "present"
+  loop:
+    "{{ repos | default([]) | list }}"
+  loop_control:
+    loop_var: repository
+
+- name: "Install latest version of software for {{ title }}"
+  ansible.builtin.apt:
+    pkg: "{{ packages | list }}"
+    state: "latest"  # noqa package-latest
+    update_cache: true
+    cache_valid_time: "{{ cache_valid_time }}"
+    force_apt_get: true
+  when:
+    - packages is defined
+    - packages | length > 0

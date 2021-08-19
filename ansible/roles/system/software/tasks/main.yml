@@ -1,0 +1,12 @@
+---
+
+- name: Making sure state is defined  # noqa fqcn-builtins
+  assert:
+    that:
+      - state is defined
+      - state in state_valid_options
+    fail_msg: "'state' parameter is not defined"
+    quiet: true
+
+- name: "Action {{ state }}"
+  include: "{{ state }}.yml"

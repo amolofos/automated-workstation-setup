@@ -1,0 +1,8 @@
+---
+
+- name: Locale for Debian
+  include: locale-debian.yml
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    # localectl commands do not work inside docker...
+    - not are_we_in_docker | default(false)

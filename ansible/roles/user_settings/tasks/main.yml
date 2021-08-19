@@ -1,0 +1,16 @@
+---
+
+# user_settings:
+#   groups:
+#     dkafetzi:
+#       - docker
+- name: Configure user groups
+  ansible.builtin.user:
+    name: "{{ settings.key }}"
+    groups: "{{ settings.value | join(',') }}"
+    append: true
+  loop: "{{ query('dict', user_settings.groups | default({})) | list }}"
+  loop_control:
+    loop_var: settings
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

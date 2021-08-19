@@ -1,0 +1,8 @@
+---
+
+users:
+  dkafetzi:
+    name: "Dimitris Kafetzis"
+    email: "kafetzis.dimitris.andreas@gmail.com"
+  admin:
+    name: "Admin"

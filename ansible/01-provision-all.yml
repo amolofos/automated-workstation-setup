@@ -1,0 +1,11 @@
+---
+
+- import_playbook: tools-gather_facts.yml
+
+- import_playbook: software-install.yml
+
+- import_playbook: software-update.yml
+
+- import_playbook: settings-system.yml
+
+- import_playbook: settings-user.yml

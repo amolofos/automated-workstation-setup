@@ -1,0 +1,44 @@
+name: ubuntu-ci
+
+on:
+
+  # Triggers the workflow on push or pull request events that target the main and release branches.
+  push:
+    branches:
+    - main
+    - release/*
+
+  # Trigger the workflow to run on pull_request events that target the main and release branches.
+  pull_request:
+    branches:
+      - main
+      - release/*
+
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    name: Test on docker
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # https://stackoverflow.com/questions/58033366/how-to-get-current-branch-within-github-actions
+      - name: Set environment variables
+        run: |
+          # Short name for current branch. For PRs, use origin branch.
+          GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+
+      - name: Run the initialisation script
+        run: ./scripts/one-time-debian.sh
+
+      - name: Run the scheduled script
+        run: ./scripts/scheduled-debian.sh

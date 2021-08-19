@@ -1,0 +1,18 @@
+---
+
+admin_cron:
+  name: "Automated workstation setup"
+  minute: "0"
+  hour: "13"
+  job: "/home/admin/scripts/admin-cronjob.sh > /home/admin/logs/admin-cronjob.log.`date \"+\\%Y-\\%m-\\%d_\\%H\"` 2>&1"
+
+  directory_tmp: "/home/admin/automated-workstation-setup/"
+
+  branch: "main"
+
+  repository: "https://github.com/amolofos/automated-workstation-setup.git"
+
+  users_to_notify: []
+
+  notify_message_success: "Automated workstation setup has been successful."
+  notify_message_failure: "Automated workstation setup has failed."

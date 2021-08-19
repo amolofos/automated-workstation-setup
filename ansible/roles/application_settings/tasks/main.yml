@@ -1,0 +1,16 @@
+---
+
+- name: Applying gsettings
+  include: gsettings.yml
+  when:
+    - application_settings.gsettings | length > 0
+
+- name: Creating dot-files
+  include: dot-files.yml
+  when:
+    - application_settings.dot_files | length > 0
+
+- name: Handling vscode settings
+  include: vscode.yml
+  when:
+    - application_settings.vscode | length > 0

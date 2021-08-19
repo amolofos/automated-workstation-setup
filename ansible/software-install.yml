@@ -1,0 +1,24 @@
+---
+
+- name: Setup software
+  hosts: all
+  roles:
+
+    - role: utils/are_we_in_docker
+
+    - role: system/software
+      vars:
+        state: install_latest
+        cache_valid_time: "{{ package_manager.cache_valid_time }}"
+      when:
+        - software is defined
+
+    - role: system/software
+      vars:
+        state: configure_alternative
+      when:
+        - software is defined
+
+    - role: system/software
+      vars:
+        state: cleanup

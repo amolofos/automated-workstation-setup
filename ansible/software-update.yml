@@ -1,0 +1,16 @@
+---
+
+- name: Unattended software upgrade
+  hosts: all
+  roles:
+
+    - role: system/software
+      vars:
+        state: upgrade
+        cache_valid_time: "{{ package_manager.cache_valid_time }}"
+      when:
+        - software is defined
+
+    - role: system/software
+      vars:
+        state: cleanup

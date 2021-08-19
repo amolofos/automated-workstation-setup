@@ -1,0 +1,15 @@
+---
+
+- name: "Install latest version of software for {{ title }}"
+  snap:
+    name: "{{ package }}"
+    state: "present"
+    classic: "yes"
+  loop:
+    "{{ packages | default([]) | list }}"
+  loop_control:
+    loop_var: package
+  when:
+    # snapd does not work inside docker. We can bind our container with
+    # snapd of the host system, but let's not do that now...
+    - not are_we_in_docker | default(false)

@@ -1,0 +1,8 @@
+---
+
+- name: "Install key for {{ title | default('') }}"
+  become: true
+  become_user: "root"
+  ansible.builtin.apt_key:
+    url: "{{ url }}"
+    state: "{{ state }}"

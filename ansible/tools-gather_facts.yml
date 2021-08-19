@@ -1,0 +1,6 @@
+---
+
+- name: Gather facts and source external variables
+  hosts: all
+  tasks:
+  gather_facts: true
