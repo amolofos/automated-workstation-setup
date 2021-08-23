@@ -1,0 +1,10 @@
+---
+
+# Note that this will fail when some repositories are not valid or their keys expired, missing etc.
+# It is left to the administrator to ensure that all repositories have been setup correctly.
+- name: Ensure that repositories are up to date
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ cache_valid_time }}"
+  # Let's not clutter the output.
+  changed_when: false

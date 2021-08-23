@@ -1,0 +1,6 @@
+---
+
+admin_cron:
+  users_to_notify:
+    - admin
+    - dkafetzi

@@ -1,0 +1,9 @@
+---
+
+- name: "Install pip packages of software for {{ title }}"
+  ansible.builtin.pip:
+    name: "{{ packages | list }}"
+    state: "latest"  # noqa package-latest
+  when:
+    - packages is defined
+    - packages | length > 0

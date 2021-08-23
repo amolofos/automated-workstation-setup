@@ -1,0 +1,14 @@
+---
+
+- name: "Set debian alternatives"
+  alternatives:
+    name: "{{ alt.name }}"
+    path: "{{ alt.path }}"
+    link: "{{ alt.link }}"
+    priority: "{{ alt.priority | default(50) }}"
+  loop:
+    "{{ software.alternatives.debian | default([]) }}"
+  loop_control:
+    loop_var: alt
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

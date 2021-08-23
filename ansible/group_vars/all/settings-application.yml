@@ -1,0 +1,52 @@
+---
+
+application_settings:
+  gsettings:
+    debian:
+      - user: dkafetzi
+        settings:
+          - { "schema": "org.gnome.desktop.input-sources",          "key": "per-window",       "value": "false" }
+          - { "schema": "org.gnome.desktop.input-sources",          "key": "sources",          "value": "[('xkb', 'us'), ('xkb', 'gr')]" }
+          - { "schema": "org.gnome.gedit.plugins.filebrowser",      "key": "tree-view",        "value": "true" }
+          - { "schema": "org.gnome.shell",                          "key": "favorite-apps",    "value": "['org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'firefox.desktop', 'firefox-trunk.desktop']" }
+          - { "schema": "org.gnome.shell.extensions.desktop-icons", "key": "show-trash",       "value": "true" }
+          - { "schema": "org.gnome.shell.extensions.desktop-icons", "key": "icon-size",        "value": "'small'" }
+          - { "schema": "org.gnome.shell.extensions.desktop-icons", "key": "show-home",        "value": "true" }
+          - { "schema": "org.yorba.shotwell.preferences.ui",        "key": "use-dark-theme",   "value": "true" }
+          - { "schema": "org.yorba.shotwell.preferences.ui",        "key": "display-sidebar",  "value": "true" }
+          - { "schema": "org.yorba.shotwell.preferences.ui",        "key": "display-toolbar",  "value": "true" }
+          - { "schema": "org.yorba.shotwell.preferences.ui",        "key": "sidebar-position", "value": "180" }
+          - { "schema": "org.yorba.shotwell.preferences.ui",        "key": "use-24-hour-time", "value": "true" }
+
+  dot_files:
+    debian:
+
+      - user: dkafetzi
+        directories:
+          - { "path": "/home/dkafetzi/.bashrc.d",         "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config",           "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/Code",      "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/Code/User", "mode": '0700' }
+          - { "path": "/home/dkafetzi/.ssh",              "mode": '0700' }
+
+        templates:
+          - { "src": "bash_profile.dkafetzi.j2",          "dest": "/home/dkafetzi/.bash_profile",                    "mode": '0700' }
+          - { "src": "bashrc_common.dkafetzi.j2",         "dest": "/home/dkafetzi/.bashrc.d/.common.bashrc",         "mode": '0700' }
+          - { "src": "bashrc_autocompletion.dkafetzi.j2", "dest": "/home/dkafetzi/.bashrc.d/.autocompletion.bashrc", "mode": '0700' }
+          - { "src": "bashrc_aliases.dkafetzi.j2",        "dest": "/home/dkafetzi/.bashrc.d/.aliases.bashrc",        "mode": '0700' }
+          - { "src": "gitconfig.dkafetzi.j2",             "dest": "/home/dkafetzi/.gitconfig",                       "mode": '0700' }
+          - { "src": "ssh.config.dkafetzi.j2",            "dest": "/home/dkafetzi/.ssh/config",                      "mode": '0700' }
+          - { "src": "vscode.settings.json.dkafetzi.j2",  "dest": "/home/dkafetzi/.config/Code/User/settings.json",  "mode": '0700' }
+
+      - user: admin
+        directories:
+          - { "path": "/home/admin/logs",    "mode": '0700' }
+          - { "path": "/home/admin/scripts", "mode": '0700' }
+
+        templates:
+          - { "src": "sudoers.d.admin.j2", "dest": "/etc/sudoers.d/99-admin-passwordless", "owner": "root", "group": "root", "mode": '0440', "validate": "/usr/sbin/visudo -cf %s" }
+
+  vscode:
+    - user: dkafetzi
+      extentions:
+        - "ms-azuretools.vscode-docker"

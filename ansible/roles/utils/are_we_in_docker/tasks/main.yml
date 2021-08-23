@@ -1,0 +1,19 @@
+---
+
+# https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
+- name: Checking whether we are inside docker where snap is not supported  # noqa fqcn-builtins
+  register: inside_docker_out
+  shell: |
+    set -o pipefail
+    cat /proc/self/cgroup | grep -c "/docker/" || true
+  args:
+    executable: /bin/bash
+  changed_when: false
+
+- name: Set are_we_in_docker fact
+  ansible.builtin.set_fact:
+    are_we_in_docker: "{{ inside_docker_out.stdout | int != 0 }}"
+
+- name: Log are_we_in_docker fact
+  ansible.builtin.debug:
+    var: are_we_in_docker

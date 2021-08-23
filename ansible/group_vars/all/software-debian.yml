@@ -1,0 +1,198 @@
+---
+
+software:
+  snap:
+    media:
+      packages:
+        - skype
+
+  apt:
+    browsers:
+      repositories_keys:
+        # Firefox daily key
+        - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xb34505ea326feaea07e3618def4186fe247510be"
+        # Chrome
+        - "https://dl-ssl.google.com/linux/linux_signing_key.pub"
+      repositories:
+        - "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+        - "ppa:mozillateam/ppa"
+        - "ppa:ubuntu-mozilla-daily/ppa"
+        - "ppa:ansible/ansible"
+      packages:
+        - firefox
+        - firefox-trunk
+        - google-chrome-stable
+    common:
+      repositories_keys:
+        - https://dl-ssl.google.com/linux/linux_signing_key.pub
+      repositories:
+        - "ppa:ansible/ansible"
+      packages:
+        - ansible
+        - apt-utils
+        - build-essential
+        - curl
+        - bzip2
+        - colortest
+        - diffutils
+        - dirmngr
+        - gir1.2-gtksource-3.0
+        - git
+        - graphviz
+        - grep
+        - gzip
+        - htop
+        - intltool
+        - itstool
+        - iputils-ping
+        - jq
+        - less
+        - libffi-dev
+        - libgraphviz-dev
+        - libnotify-bin
+        - libxml2-utils
+        - meld
+        - nano
+        - net-tools
+        - netcat
+        - notify-osd
+        - nmap
+        - openssl
+        - p7zip
+        - locales
+        - python3-apt
+        - python3-pip
+        - pwgen
+        - rsync
+        - snapd
+        - software-properties-common
+        - sshfs
+        - sshpass
+        - tar
+        - telnet
+        - tmux
+        - tree
+        - unzip
+        - vim
+        - wget
+        - whois
+        - zip
+    editors:
+      repositories:
+        - "ppa:neovim-ppa/unstable"
+      packages:
+        - geany
+        - libreoffice
+        - neovim
+        - python3-neovim
+    languages:
+      packages:
+        - firefox-locale-el
+        - firefox-locale-en
+        - gnome-getting-started-docs-el
+        - gnome-user-docs-el
+        - hunspell-el
+        - hunspell-en-gb
+        - hyphen-el
+        - hyphen-en-us
+        - language-pack-el
+        - language-pack-en
+        - language-pack-gnome-el
+        - language-pack-gnome-en
+    software_development:
+      repositories_keys:
+        # VSCode
+        - "https://packages.microsoft.com/keys/microsoft.asc"
+        # Docker
+        - "https://download.docker.com/linux/ubuntu/gpg"
+      repositories:
+        # VSCode
+        - "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+        # Docker
+        - "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+      packages:
+        - ansible-lint
+        - autoconf
+        - automake
+        - cmake
+        - code
+        - docker-ce
+        - g++
+        - gcc
+        - gettext
+        - libcurl4-gnutls-dev
+        - libexpat1-dev
+        - libghc-zlib-dev
+        - libmemcached-tools
+        - libncurses5-dev
+        - libtool
+        - make
+        - memcached
+        - mysql-server
+        - nodejs
+        - npm
+        - openssh-server
+        - pandoc
+        - pkg-config
+        - sqlite3
+        - sqlitebrowser
+        - tmux
+    software_languages:
+      repositories:
+        - "ppa:deadsnakes/ppa"
+      packages:
+        - default-jdk
+        - default-jre
+        - openjdk-11-jdk
+        - openjdk-8-jdk
+        - python3.8
+        - python3.8-dev
+        - python3.8-distutils
+        - python3.8-venv
+        - python3.9
+        - python3.9-dev
+        - python3.9-distutils
+        - python3.9-venv
+        - python3-apt
+        - python3-pip
+    media:
+      repositories_keys:
+        - "https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc"
+      repositories:
+        - "deb http://linux.teamviewer.com/deb stable main"
+      packages:
+        - teamviewer
+
+  pip:
+    various:
+      packages:
+        - ansible-lint
+        - pip
+        - pipenv
+        - requests
+        - setuptools
+        - xmltodict
+        - yamllint
+
+  alternatives:
+    debian:
+      - name: "gnome-www-browser"
+        path: "/usr/bin/firefox-trunk"
+        link: "/usr/bin/gnome-www-browser"
+        priority: 1000
+      - name: "java"
+        path: "/usr/lib/jvm/java-11-openjdk-amd64/bin/java"
+        link: "/usr/bin/java"
+        priority: 1000
+      - name: "python"
+        path: "/usr/bin/python3.8"
+        link: "/usr/bin/python"
+        priority: 1000
+      - name: "vi"
+        path: "/usr/bin/nvim"
+        link: "/bin/vi"
+        priority: 1000
+      - name: "vim"
+        path: "/usr/bin/nvim"
+        link: "/bin/vim"
+        priority: 1000

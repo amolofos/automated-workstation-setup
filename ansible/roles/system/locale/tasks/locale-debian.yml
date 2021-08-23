@@ -1,0 +1,40 @@
+---
+# -----------------------------------------------------------------------------
+# This is based on https://serverfault.com/questions/959026/how-do-i-generate-and-set-the-locale-using-ansible.
+# -----------------------------------------------------------------------------
+
+- name: Ensure localisation files for '{{ system.locale }}' are available
+  ansible.builtin.locale_gen:
+    name: "{{ system.locale }}"
+    state: present
+
+- name: Ensure localisation files for '{{ system.language }}' are available
+  ansible.builtin.locale_gen:
+    name: "{{ system.language }}"
+    state: present
+
+- name: Get current locale and language configuration  # noqa fqcn-builtins
+  register: locale_status
+  shell: >-
+    localectl status
+  changed_when: false
+
+- name: Parse 'LANG' from current locale and language configuration
+  ansible.builtin.set_fact:
+    locale_lang: "{{ locale_status.stdout | regex_search('LANG=([^\n]+)', '\\1') | first }}"
+
+- name: Parse 'LANGUAGE' from current locale and language configuration
+  ansible.builtin.set_fact:
+    locale_language: "{{ locale_status.stdout | regex_search('LANGUAGE=([^\n]+)', '\\1') | default([locale_lang], true) | first }}"
+
+- name: Current locale data
+  ansible.builtin.debug:
+    msg: "Will update LANG from {{ locale_lang }} to {{ system.locale }}, and LANGUAGE from {{ locale_language }} to {{ system.language }}."
+  when:
+    - locale_lang != system.locale or locale_language != system.language
+
+- name: Configure locale to '{{ system.locale }}' and language to '{{ system.language }}'  # noqa fqcn-builtins
+  shell: >-
+    localectl set-locale LANG={{ system.locale }} LANGUAGE={{ system.language }}
+  when:
+    - locale_lang != system.locale or locale_language != system.language

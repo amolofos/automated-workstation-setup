@@ -1,0 +1,20 @@
+---
+
+- name: Ensure the system can use the HTTPS transport for APT
+  register: apt_https_transport
+  ansible.builtin.stat:
+    path: "/usr/lib/apt/methods/https"
+
+- name: Install HTTPS transport for APT
+  ansible.builtin.apt:
+    pkg: apt-transport-https
+    state: installed
+  when:
+    - not apt_https_transport.stat.exists
+
+- name: Enable all repositories in sources.list
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list
+    regexp: '^#\s?deb(.+)http://(.+)/ubuntu(.+)$'
+    replace: 'deb\1http://\2/ubuntu\3'
+    backup: false

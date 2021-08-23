@@ -1,0 +1,64 @@
+# -----------------------------------------------------------------------------
+FROM ubuntu:20.04 as base
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Let's install some helpful tools
+RUN apt-get update -qq >/dev/null 2>&1 && \
+	apt-get install --yes --no-install-recommends \
+		apt-transport-https \
+		apt-utils \
+		ca-certificates \
+		cron \
+		curl \
+		dbus-x11 \
+		dirmngr \
+		less \
+		libnotify-bin \
+		iputils-ping \
+		net-tools \
+		netcat \
+		notify-osd \
+		software-properties-common \
+		telnet \
+		vim && \
+	apt-get clean && \
+ 	rm -rf /var/lib/apt/lists/*
+
+WORKDIR /user/app/workdir
+
+# -----------------------------------------------------------------------------
+FROM base as pre-test
+
+RUN apt-get update --yes && \
+	apt-get install --yes --no-install-recommends sudo
+
+RUN sudo add-apt-repository --yes ppa:deadsnakes/ppa && \
+	sudo apt-add-repository --yes ppa:ansible/ansible && \
+	apt-get update -qq >/dev/null 2>&1 && \
+	apt-get install -qq --yes --no-install-recommends \
+		ansible \
+		python3.8 \
+		python3-apt \
+		python3-pip
+
+RUN pip3 install --quiet \
+	ansible-lint \
+	yamllint
+
+COPY ansible ./
+
+RUN ansible-lint
+
+# -----------------------------------------------------------------------------
+# We need to have a base so that we do not install ansible, sudo etc by default.
+# We want the script to handle them.
+FROM base as build
+
+COPY docker-entrypoint.sh ./
+COPY ansible ./ansible/
+COPY scripts ./scripts/
+
+RUN chmod 755 docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]

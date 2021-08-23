@@ -1,0 +1,38 @@
+---
+
+- name: Update apt repo and cache on all Debian/Ubuntu boxes
+  ansible.builtin.apt:
+    update_cache: true
+    force_apt_get: true
+    cache_valid_time: "{{ cache_valid_time }}"
+
+- name: Upgrade all packages on servers
+  register: software_upgrade_output
+  ansible.builtin.apt:
+    autoremove: true
+    force_apt_get: true
+    install_recommends: false
+    upgrade: "dist"
+
+- name: Upgrade logs
+  ansible.builtin.debug:
+    msg: "{{ software_upgrade_output }}"
+  changed_when: false
+
+- name: Check if a reboot is needed on all servers
+  register: reboot_required_file
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+    get_md5: false
+  changed_when: false
+
+- name: Notify user that a reboot is needed
+  ansible.builtin.shell: >-
+    sudo -iu "{{ system_user.key }}" sh -c "notify-send -t 0 -i face-wink 'Reboot is needed' 'Automated unattended upgrade has finished. A system reboot is required.'"
+  loop:
+    "{{ query('dict', users | default({})) }}"
+  loop_control:
+    loop_var: system_user
+  failed_when: false
+  when:
+    - reboot_required_file.stat.exists

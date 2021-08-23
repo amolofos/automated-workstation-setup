@@ -1,0 +1,11 @@
+---
+
+- name: Cleanup not needed software
+  register: software_cleanup_output
+  ansible.builtin.apt:
+    autoclean: true
+
+- name: Cleanup logs
+  ansible.builtin.debug:
+    msg: "{{ software_cleanup_output }}"
+  changed_when: false

@@ -1,0 +1,39 @@
+---
+
+# application_settings:
+#   dot_files:
+#     debian:
+#       - user: dkafetzi
+#         git_url: ""
+#         templates:
+#           - { "src": "admin-sudoers.d.j2, "dest": "/etc/sudoers.d/99-admin-passwordless", "mode": '0440', "validate": "/usr/sbin/visudo -cf %s" }
+
+- name: Create user directories
+  ansible.builtin.file:
+    path: "{{ dir.1.path }}"
+    owner: "{{ dir.1.owner | default(dir.0.user) }}"
+    group: "{{ dir.1.group | default(dir.0.user) }}"
+    state: directory
+    mode: "{{ dir.1.mode  | default('0755') }}"
+  loop: "{{ application_settings.dot_files.debian | default([]) | subelements('directories', skip_missing=True) }}"
+  loop_control:
+    loop_var: dir
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Setup user dot files
+  ansible.builtin.template:
+    src: "{{ dot_file.1.src }}"
+    dest: "{{ dot_file.1.dest }}"
+    owner: "{{ dot_file.1.owner | default(dot_file.0.user) }}"
+    group: "{{ dot_file.1.group | default(dot_file.0.user) }}"
+    mode: "{{ dot_file.1.mode  | default('0755') }}"
+    validate: "{{ dot_file.1.validate | default('') }}"
+    backup: false
+  vars:
+    user: "{{ dot_file.0.user }}"
+  loop: "{{ application_settings.dot_files.debian | default([]) | subelements('templates', skip_missing=True) }}"
+  loop_control:
+    loop_var: dot_file
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

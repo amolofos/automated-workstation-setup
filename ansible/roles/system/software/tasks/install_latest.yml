@@ -1,0 +1,43 @@
+---
+
+- name: Install apt  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/apt
+    tasks_from: install
+  vars:
+    keys: "{{ apt.value.repositories_keys | default([]) }}"
+    repos: "{{ apt.value.repositories | default([]) }}"
+    packages: "{{ apt.value.packages | default([]) }}"
+    title: "{{ apt.key | default('') }}"
+  loop:
+    "{{ query('dict', software.apt | default({})) }}"
+  loop_control:
+    loop_var: apt
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install snap  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/snap
+    tasks_from: install
+  vars:
+    packages: "{{ snap.value.packages | default([]) }}"
+    title: "{{ snap.key | default('') }}"
+  loop:
+    "{{ query('dict', software.snap | default({})) }}"
+  loop_control:
+    loop_var: snap
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install pip  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/pip
+    tasks_from: install
+  vars:
+    packages: "{{ pip.value.packages | default([]) }}"
+    title: "{{ pip.key | default('') }}"
+  loop:
+    "{{ query('dict', software.pip | default({})) }}"
+  loop_control:
+    loop_var: pip

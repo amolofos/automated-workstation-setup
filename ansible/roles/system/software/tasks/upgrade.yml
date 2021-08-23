@@ -1,0 +1,8 @@
+---
+
+- name: Upgrade apt  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/apt
+    tasks_from: upgrade
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

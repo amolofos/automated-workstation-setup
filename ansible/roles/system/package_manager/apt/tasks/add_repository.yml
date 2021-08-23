@@ -1,0 +1,10 @@
+---
+
+- name: "Add repository for {{ title | default('') }}"
+  become: true
+  become_user: "root"
+  ansible.builtin.apt_repository:
+    repo: "{{ repo }}"
+    state: "{{ state }}"
+    update_cache: true
+    validate_certs: false

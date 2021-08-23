@@ -1,0 +1,15 @@
+---
+
+- name: Apply user specific settings
+  hosts: all
+  roles:
+
+    - role: utils/are_we_in_docker
+
+    - role: user_settings
+      when:
+        - user_settings is defined
+
+    - role: application_settings
+      when:
+        - application_settings is defined

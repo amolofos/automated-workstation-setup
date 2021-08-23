@@ -1,0 +1,7 @@
+# Ansible
+**/.ansibleFactsCacheDir
+**.retry
+
+# Git
+**/.git
+**.gitignore

@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# It is expected to be run under admin user.
+#
+set -ueo pipefail
+
+REPOSITORY_BRANCH=${REPOSITORY_BRANCH:-{{ admin_cron.branch }}}
+REPOSITORY=${REPOSITORY:-{{ admin_cron.repository }}}
+
+log() {
+	echo "`date +"%Y-%m-%d %H:%M:%S"`: $1"
+}
+
+rm -rf {{ admin_cron.directory_tmp }} && \
+  git clone --quiet --branch $REPOSITORY_BRANCH $REPOSITORY --depth 1 {{ admin_cron.directory_tmp }} && \
+  cd {{ admin_cron.directory_tmp }} && \
+  ./scripts/scheduled-debian.sh && \
+  cd $HOME && \
+  rm -rf {{ admin_cron.directory_tmp }}
+
+{% if admin_cron.users_to_notify is defined and admin_cron.users_to_notify | length > 0 %}
+if [ "$?" -eq "0" ]; then
+{% for user in admin_cron.users_to_notify %}
+  sudo -iu {{ user }} sh -c "notify-send -i face-wink '{{ admin_cron.name }}' '{{ admin_cron.notify_message_success }}'"
+{% endfor %}
+else
+{% for user in admin_cron.users_to_notify %}
+  sudo -iu {{ user }} sh -c "notify-send -t 0 -i face-wink '{{ admin_cron.name }}' '{{ admin_cron.notify_message_failure }}'"
+{% endfor %}
+fi
+{% endif %}
