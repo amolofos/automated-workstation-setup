@@ -21,22 +21,12 @@ application_settings:
   dot_files:
     debian:
 
-      - user: dkafetzi
+      - user: root
         directories:
-          - { "path": "/home/dkafetzi/.bashrc.d",         "mode": '0700' }
-          - { "path": "/home/dkafetzi/.config",           "mode": '0700' }
-          - { "path": "/home/dkafetzi/.config/Code",      "mode": '0700' }
-          - { "path": "/home/dkafetzi/.config/Code/User", "mode": '0700' }
-          - { "path": "/home/dkafetzi/.ssh",              "mode": '0700' }
+          - { "path": "/etc/profile.d",    "mode": '0755' }
 
         templates:
-          - { "src": "bash_profile.dkafetzi.j2",          "dest": "/home/dkafetzi/.bash_profile",                    "mode": '0700' }
-          - { "src": "bashrc_common.dkafetzi.j2",         "dest": "/home/dkafetzi/.bashrc.d/.common.bashrc",         "mode": '0700' }
-          - { "src": "bashrc_autocompletion.dkafetzi.j2", "dest": "/home/dkafetzi/.bashrc.d/.autocompletion.bashrc", "mode": '0700' }
-          - { "src": "bashrc_aliases.dkafetzi.j2",        "dest": "/home/dkafetzi/.bashrc.d/.aliases.bashrc",        "mode": '0700' }
-          - { "src": "gitconfig.dkafetzi.j2",             "dest": "/home/dkafetzi/.gitconfig",                       "mode": '0700' }
-          - { "src": "ssh.config.dkafetzi.j2",            "dest": "/home/dkafetzi/.ssh/config",                      "mode": '0700' }
-          - { "src": "vscode.settings.json.dkafetzi.j2",  "dest": "/home/dkafetzi/.config/Code/User/settings.json",  "mode": '0700' }
+          - { "src": "profile.d.golang.j2", "dest": "/etc/profile.d/.golang.profile.sh", "owner": "root", "group": "root", "mode": '0644' }
 
       - user: admin
         directories:
@@ -45,6 +35,30 @@ application_settings:
 
         templates:
           - { "src": "sudoers.d.admin.j2", "dest": "/etc/sudoers.d/99-admin-passwordless", "owner": "root", "group": "root", "mode": '0440', "validate": "/usr/sbin/visudo -cf %s" }
+
+      - user: dkafetzi
+        directories:
+          - { "path": "/home/dkafetzi/.bashrc.d",         "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config",           "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/Code",      "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/Code/User", "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/nvim",      "mode": '0700' }
+          - { "path": "/home/dkafetzi/.ssh",              "mode": '0700' }
+          - { "path": "/home/dkafetzi/workspace",         "mode": '0755' }
+          - { "path": "/home/dkafetzi/workspace/go",      "mode": '0755' }
+
+        templates:
+          - { "src": "bash_profile.dkafetzi.j2",          "dest": "/home/dkafetzi/.bash_profile",                    "mode": '0700' }
+          - { "src": "bashrc_common.dkafetzi.j2",         "dest": "/home/dkafetzi/.bashrc.d/.common.bashrc",         "mode": '0700' }
+          - { "src": "bashrc_autocompletion.dkafetzi.j2", "dest": "/home/dkafetzi/.bashrc.d/.autocompletion.bashrc", "mode": '0700' }
+          - { "src": "bashrc_aliases.dkafetzi.j2",        "dest": "/home/dkafetzi/.bashrc.d/.aliases.bashrc",        "mode": '0700' }
+          - { "src": "gitconfig.dkafetzi.j2",             "dest": "/home/dkafetzi/.gitconfig",                       "mode": '0700' }
+          - { "src": "inputrc.dkafetzi.j2",               "dest": "/home/dkafetzi/.inputrc",                         "mode": '0700' }
+          - { "src": "neovim.init.vim.dkafetzi.j2",       "dest": "/home/dkafetzi/.config/nvim/init.vim",            "mode": '0700' }
+          - { "src": "profile.dkafetzi.j2",               "dest": "/home/dkafetzi/.profile",                         "mode": '0700' }
+          - { "src": "ssh.config.dkafetzi.j2",            "dest": "/home/dkafetzi/.ssh/config",                      "mode": '0700' }
+          - { "src": "vimrc.dkafetzi.j2",                 "dest": "/home/dkafetzi/.vimrc",                           "mode": '0700' }
+          - { "src": "vscode.settings.json.dkafetzi.j2",  "dest": "/home/dkafetzi/.config/Code/User/settings.json",  "mode": '0700' }
 
   vscode:
     - user: dkafetzi

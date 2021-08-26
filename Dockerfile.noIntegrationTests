@@ -53,21 +53,6 @@ COPY ansible ./
 RUN ansible-lint
 
 # -----------------------------------------------------------------------------
-FROM base as test-one-time
-
-COPY docker-entrypoint* ./
-COPY ansible ./ansible/
-COPY scripts ./scripts/
-
-RUN chmod 755 docker-entrypoint*
-RUN ./docker-entrypoint-one-time.sh
-
-# -----------------------------------------------------------------------------
-FROM test-one-time as test-scheduled
-
-RUN ./docker-entrypoint-scheduled.sh
-
-# -----------------------------------------------------------------------------
 FROM base as build
 
 COPY docker-entrypoint* ./

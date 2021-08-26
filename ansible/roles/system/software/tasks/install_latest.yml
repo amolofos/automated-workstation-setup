@@ -41,3 +41,18 @@
     "{{ query('dict', software.pip | default({})) }}"
   loop_control:
     loop_var: pip
+
+- name: Install software with custom commands  # noqa fqcn-builtins
+  register: custom_out
+  shell: |
+    {{ custom }}
+  args:
+    executable: /bin/bash
+  loop:
+    "{{ software.custom | default([]) }}"
+  loop_control:
+    loop_var: custom
+  changed_when:
+    - "'Changed' in custom_out.stdout"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

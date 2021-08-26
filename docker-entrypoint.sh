@@ -2,5 +2,5 @@
 
 set -ueo pipefail
 
-./scripts/one-time-debian.sh
-sudo -u admin sh -c "./scripts/scheduled-debian.sh"
+./docker-entrypoint-one-time.sh
+./docker-entrypoint-scheduled.sh
