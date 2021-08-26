@@ -37,8 +37,5 @@ jobs:
           GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
-      - name: Run the initialisation script
-        run: ./scripts/one-time-debian.sh
-
-      - name: Run the scheduled script
-        run: ./scripts/scheduled-debian.sh
+      - name: Build
+        run: ./docker-entrypoint.sh

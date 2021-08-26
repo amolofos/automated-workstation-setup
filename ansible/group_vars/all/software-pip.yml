@@ -1,0 +1,13 @@
+---
+
+software:
+  pip:
+    various:
+      packages:
+        - ansible-lint
+        - pip
+        - pipenv
+        - requests
+        - setuptools
+        - xmltodict
+        - yamllint
