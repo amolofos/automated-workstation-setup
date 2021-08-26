@@ -4,5 +4,6 @@ users:
   dkafetzi:
     name: "Dimitris Kafetzis"
     email: "kafetzis.dimitris.andreas@gmail.com"
+    groups: "docker,sudo"
   admin:
     name: "Admin"

@@ -42,9 +42,10 @@ Under `ansible` folder we have the playbooks that will run periodically.
 Refer to [README-execution-steps.md](docs/README-execution-steps.md).
 
 # Documentation
-  * [README-record-architecture-decisions.md](docs/README-record-architecture-decisions.md)
+  * [README-build.md](docs/README-build.md)
   * [README-execution-steps.md](docs/README-execution-steps.md)
   * [README-influences.md](docs/README-influences.md)
+  * [README-record-architecture-decisions.md](docs/README-record-architecture-decisions.md)
   * [README-TODO.md](docs/README-TODO.md)
 
 # License

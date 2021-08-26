@@ -1,0 +1,16 @@
+---
+
+# users:
+#   dkafetzi:
+#     name: "Dimitris Kafetzis"
+#     email: "kafetzis.dimitris.andreas@gmail.com"
+#   admin:
+#     name: "Admin"
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ user.key }}"
+    shell: "/bin/bash"
+    state: "present"
+  loop: "{{ query('dict', users | default({})) }}"
+  loop_control:
+    loop_var: user

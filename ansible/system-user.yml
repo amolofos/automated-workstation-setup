@@ -1,0 +1,12 @@
+---
+
+# Note that we expect the users to already exist in the system,
+# as this role is very basic.
+
+- name: Create users
+  hosts: all
+  roles:
+
+    - role: system/user
+      when:
+        - users is defined

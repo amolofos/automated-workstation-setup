@@ -6,10 +6,10 @@
 
     - role: utils/are_we_in_docker
 
-    - role: user_settings
+    - role: settings/user
       when:
-        - user_settings is defined
+        - settings_user is defined
 
-    - role: application_settings
+    - role: settings/application
       when:
-        - application_settings is defined
+        - settings_application is defined

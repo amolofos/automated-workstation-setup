@@ -20,17 +20,16 @@
   args:
     executable: /bin/bash
     warn: false
-  loop: "{{ application_settings.gsettings.debian | default([]) | subelements('settings', skip_missing=True) }}"
+  loop: "{{ settings_application.gsettings.debian | default([]) | subelements('settings', skip_missing=True) }}"
   loop_control:
     loop_var: gsettings
   failed_when:
-    - gsettings_out.stderr | length > 0
-    - "'No such schema' not in gsettings_out.stderr"
+    - gsettings_out.module_stderr | default(gsettings_out.stderr) | length > 0
+    - "'No such schema' not in gsettings_out.module_stderr | default(gsettings_out.stderr)"
     # Hack to workaround the dbus not running by default in docker.
-    - "'Error spawning command line' in gsettings_out.stderr and not are_we_in_docker | default(false)"
+    - "'Error spawning command line' in gsettings_out.module_stderr | default(gsettings_out.stderr) and not are_we_in_docker"
   changed_when:
-    - gsettings_out.stderr | length == 0
-    - "'Setting applied.' in gsettings_out.stdout"
-
+    - gsettings_out.module_stderr | default(gsettings_out.stderr) | length == 0
+    - "'Setting applied.' in gsettings_out.module_stdout | default(gsettings_out.stdout)"
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

@@ -1,0 +1,27 @@
+---
+
+- name: Make bluetooth discoverable
+  ansible.builtin.lineinfile:
+    insertafter: "^#DiscoverableTimeout"
+    line: "DiscoverableTimeout = 0"
+    path: /etc/bluetooth/main.conf
+    regexp: "^DiscoverableTimeout *=.*"
+    state: "present"
+
+- name: Make bluetooth discoverable
+  ansible.builtin.lineinfile:
+    insertafter: "EOF"
+    line: "AutoEnable = true"
+    path: /etc/bluetooth/main.conf
+    regexp: "^AutoEnable *=.*"
+    state: "present"
+
+# https://askubuntu.com/questions/1036195/bluetooth-doesnt-work-after-resuming-from-sleep-ubuntu-18-04-lts
+- name: Make bluetooth working after sleep
+  ansible.builtin.template:
+    src: "lib.systemd.system-sleep.bluetooth.j2"
+    dest: "/lib/systemd/system-sleep/bluetooth"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    backup: false

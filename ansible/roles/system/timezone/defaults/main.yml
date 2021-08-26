@@ -2,3 +2,5 @@
 
 system:
   timezone: "Asia/Singapore"
+
+are_we_in_docker: false

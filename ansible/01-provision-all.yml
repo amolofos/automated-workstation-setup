@@ -8,4 +8,8 @@
 
 - import_playbook: settings-system.yml
 
+- import_playbook: system-user.yml
+
 - import_playbook: settings-user.yml
+
+- import_playbook: system-bluetooth.yml

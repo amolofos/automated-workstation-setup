@@ -4,3 +4,5 @@ system:
   locale: "en_GB.UTF-8"
   language: "en_GB.UTF-8"
   timezone: "Asia/Singapore"
+
+are_we_in_docker: false

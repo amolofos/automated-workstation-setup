@@ -29,9 +29,12 @@ software:
         - "ppa:ansible/ansible"
       packages:
         - ansible
+        - apt-file
         - apt-utils
         - build-essential
         - curl
+        # Bluetooth
+        - bluez
         - bzip2
         - colortest
         - diffutils
@@ -52,6 +55,7 @@ software:
         - libnotify-bin
         - libxml2-utils
         - meld
+        - mlocate
         - nano
         - net-tools
         - netcat
@@ -63,6 +67,7 @@ software:
         - python3-apt
         - python3-pip
         - pwgen
+        - rlwrap
         - rsync
         - snapd
         - software-properties-common

@@ -1,0 +1,22 @@
+---
+
+- name: Does bluetooh exist?  # noqa fqcn-builtins
+  register: bluetooh_out
+  shell: |
+    set -o pipefail
+    sudo find /var/lib/bluetooth/ -type f -name info -print0 | xargs -0 sudo grep -iE 'Class=0x[0-9a-f]{3}5[4c]0' | wc -l || true
+  args:
+    executable: /bin/bash
+    warn: false
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: enable-on-login.yml
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - bluetooh_out.stdout | int > 0
+
+- include: enable-on-boot.yml
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - bluetooh_out.stdout | int > 0
