@@ -42,6 +42,7 @@ application_settings:
           - { "path": "/home/dkafetzi/.config",           "mode": '0700' }
           - { "path": "/home/dkafetzi/.config/Code",      "mode": '0700' }
           - { "path": "/home/dkafetzi/.config/Code/User", "mode": '0700' }
+          - { "path": "/home/dkafetzi/.config/nvim",      "mode": '0700' }
           - { "path": "/home/dkafetzi/.ssh",              "mode": '0700' }
           - { "path": "/home/dkafetzi/workspace",         "mode": '0755' }
           - { "path": "/home/dkafetzi/workspace/go",      "mode": '0755' }
@@ -52,8 +53,11 @@ application_settings:
           - { "src": "bashrc_autocompletion.dkafetzi.j2", "dest": "/home/dkafetzi/.bashrc.d/.autocompletion.bashrc", "mode": '0700' }
           - { "src": "bashrc_aliases.dkafetzi.j2",        "dest": "/home/dkafetzi/.bashrc.d/.aliases.bashrc",        "mode": '0700' }
           - { "src": "gitconfig.dkafetzi.j2",             "dest": "/home/dkafetzi/.gitconfig",                       "mode": '0700' }
+          - { "src": "inputrc.dkafetzi.j2",               "dest": "/home/dkafetzi/.inputrc",                         "mode": '0700' }
+          - { "src": "neovim.init.vim.dkafetzi.j2",       "dest": "/home/dkafetzi/.config/nvim/init.vim",            "mode": '0700' }
           - { "src": "profile.dkafetzi.j2",               "dest": "/home/dkafetzi/.profile",                         "mode": '0700' }
           - { "src": "ssh.config.dkafetzi.j2",            "dest": "/home/dkafetzi/.ssh/config",                      "mode": '0700' }
+          - { "src": "vimrc.dkafetzi.j2",                 "dest": "/home/dkafetzi/.vimrc",                           "mode": '0700' }
           - { "src": "vscode.settings.json.dkafetzi.j2",  "dest": "/home/dkafetzi/.config/Code/User/settings.json",  "mode": '0700' }
 
   vscode:
