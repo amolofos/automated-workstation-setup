@@ -1,6 +1,6 @@
 ---
 
-# application_settings:
+# settings_application:
 #   vscode:
 #    - user: dkafetzi
 #      extentions: []
@@ -13,7 +13,7 @@
   args:
     executable: /bin/bash
     warn: false
-  loop: "{{ application_settings.vscode | default([]) | subelements('extentions', skip_missing=True) }}"
+  loop: "{{ settings_application.vscode | default([]) | subelements('extentions', skip_missing=True) }}"
   loop_control:
     loop_var: settings
   changed_when:

@@ -1,0 +1,9 @@
+---
+
+- name: Update initramfs  # noqa fqcn-builtins
+  become: true
+  become_user: "root"
+  shell: >-
+    update-initramfs -u -k $(uname -r)
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

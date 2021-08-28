@@ -4,13 +4,13 @@
   hosts: all
   roles:
 
-    - role: system/software
+    - role: software
       vars:
         state: upgrade
         cache_valid_time: "{{ package_manager.cache_valid_time }}"
       when:
         - software is defined
 
-    - role: system/software
+    - role: software
       vars:
         state: cleanup

@@ -1,7 +1,7 @@
 ---
 
 # https://tuhrig.de/how-to-know-you-are-inside-a-docker-container/
-- name: Checking whether we are inside docker where snap is not supported  # noqa fqcn-builtins
+- name: Checking whether we are inside docker  # noqa fqcn-builtins
   register: inside_docker_out
   shell: |
     set -o pipefail

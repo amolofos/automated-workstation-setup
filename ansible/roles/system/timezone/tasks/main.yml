@@ -7,4 +7,4 @@
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     # timedatectl command does not work inside docker...
-    - not are_we_in_docker | default(false)
+    - not are_we_in_docker

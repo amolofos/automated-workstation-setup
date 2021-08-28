@@ -1,6 +1,6 @@
 ---
 
-application_settings:
+settings_application:
   gsettings:
     debian:
       - user: dkafetzi

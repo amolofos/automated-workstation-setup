@@ -1,6 +1,6 @@
 ---
 
-# application_settings:
+# settings_application:
 #   dot_files:
 #     debian:
 #       - user: dkafetzi
@@ -15,7 +15,7 @@
     group: "{{ dir.1.group | default(dir.0.user) }}"
     state: directory
     mode: "{{ dir.1.mode  | default('0755') }}"
-  loop: "{{ application_settings.dot_files.debian | default([]) | subelements('directories', skip_missing=True) }}"
+  loop: "{{ settings_application.dot_files.debian | default([]) | subelements('directories', skip_missing=True) }}"
   loop_control:
     loop_var: dir
   when:
@@ -32,7 +32,7 @@
     backup: false
   vars:
     user: "{{ dot_file.0.user }}"
-  loop: "{{ application_settings.dot_files.debian | default([]) | subelements('templates', skip_missing=True) }}"
+  loop: "{{ settings_application.dot_files.debian | default([]) | subelements('templates', skip_missing=True) }}"
   loop_control:
     loop_var: dot_file
   when:

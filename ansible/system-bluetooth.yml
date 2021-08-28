@@ -1,0 +1,7 @@
+---
+
+- name: Setup bluetooth
+  hosts: all
+  roles:
+
+    - role: system/bluetooth

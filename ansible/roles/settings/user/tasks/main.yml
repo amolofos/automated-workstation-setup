@@ -1,6 +1,6 @@
 ---
 
-# user_settings:
+# settings_user:
 #   groups:
 #     dkafetzi:
 #       - docker
@@ -9,7 +9,7 @@
     name: "{{ settings.key }}"
     groups: "{{ settings.value | join(',') }}"
     append: true
-  loop: "{{ query('dict', user_settings.groups | default({})) | list }}"
+  loop: "{{ query('dict', settings_user.groups | default({})) | list }}"
   loop_control:
     loop_var: settings
   when:
