@@ -39,6 +39,7 @@ log_success_msg "dbus-daemon started"
 /etc/init.d/dbus status
 
 log_begin_msg "Activating bluetoothd..."
+ps | grep /usr/lib/bluetooth/bluetoothd | grep -v grep | awk -F ' ' '{ print $1 }' | xargs --no-run-if-empty kill -9
 /usr/lib/bluetooth/bluetoothd &
 log_end_msg
 

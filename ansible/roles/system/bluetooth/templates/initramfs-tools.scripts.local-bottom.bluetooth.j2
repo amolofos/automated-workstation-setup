@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# {{ ansible_managed }}
+
+PREREQ="lvm,udev"
+prereqs() {
+	echo "$PREREQ"
+}
+
+case ${1:-""} in
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+quiet=${quiet:-"no"}
+. /scripts/functions
+log_success_msg "Inside initramfs-tools/scripts/local-bottom/bluetooth"
+
+log_begin_msg "Killing all bluetoothd..."
+ps | grep /usr/lib/bluetooth/bluetoothd | grep -v grep | awk -F ' ' '{ print $1 }' | xargs --no-run-if-empty kill -9
+log_end_msg
+
+exit 0
