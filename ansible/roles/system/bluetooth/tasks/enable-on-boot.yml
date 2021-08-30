@@ -22,8 +22,9 @@
     mode: "0755"
     backup: false
   with_items:
-    - { "src": "initramfs-tools.hooks.bluetooth.j2",             "dest": "/etc/initramfs-tools/hooks/bluetooth" }
-    - { "src": "initramfs-tools.scripts.local-top.bluetooth.j2", "dest": "/etc/initramfs-tools/scripts/local-top/bluetooth" }
+    - { "src": "initramfs-tools.hooks.bluetooth.j2",                "dest": "/etc/initramfs-tools/hooks/bluetooth" }
+    - { "src": "initramfs-tools.scripts.local-top.bluetooth.j2",    "dest": "/etc/initramfs-tools/scripts/local-top/bluetooth" }
+    - { "src": "initramfs-tools.scripts.local-bottom.bluetooth.j2", "dest": "/etc/initramfs-tools/scripts/local-bottom/bluetooth" }
 
 - name: update-initramfs  # noqa fqcn-builtins
   include_role:

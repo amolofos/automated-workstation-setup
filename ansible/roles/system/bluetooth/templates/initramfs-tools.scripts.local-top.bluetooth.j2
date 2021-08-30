@@ -20,28 +20,26 @@ quiet=${quiet:-"no"}
 . /scripts/functions
 log_success_msg "Inside initramfs-tools/scripts/local-top/bluetooth"
 
-#load_modules
-#log_success_msg "Bluetooth modules have been loaded."
-
 if [ ! -x "/usr/lib/bluetooth/bluetoothd" ] && [ ! -x "/usr/bin/dbus-daemon" ]; then
 	panic "bluetoothd or dbus-daemon executable are not found"
 fi
 log_success_msg "bluetoothd and dbus-daemon exist."
 
 groupadd --gid 106 messagebus
-useradd --gid messagebus --uid 103 --home-dir /nonexistent --shell /usr/sbin/nologin messagebus
+useradd --gid messagebus --uid 103 --home-dir /nonexistent --shell /usr/sbin/nologin messagebus || true
 
 log_begin_msg "Activating dbus..."
 mkdir -p /run/dbus/
 /etc/init.d/dbus status
 /etc/init.d/dbus start
-/etc/init.d/dbus status
 # This can be used instead of the init.d script.
 #/usr/bin/dbus-daemon --system --syslog --print-address
 log_end_msg
 log_success_msg "dbus-daemon started"
+/etc/init.d/dbus status
 
 log_begin_msg "Activating bluetoothd..."
+ps | grep /usr/lib/bluetooth/bluetoothd | grep -v grep | awk -F ' ' '{ print $1 }' | xargs --no-run-if-empty kill -9
 /usr/lib/bluetooth/bluetoothd &
 log_end_msg
 
