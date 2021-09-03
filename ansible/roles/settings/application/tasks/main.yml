@@ -5,6 +5,11 @@
   when:
     - settings_application.gsettings | length > 0
 
+- name: Applying dconf
+  include: dconf.yml
+  when:
+    - settings_application.dconf | length > 0
+
 - name: Creating dot-files
   include: dot-files.yml
   when:
