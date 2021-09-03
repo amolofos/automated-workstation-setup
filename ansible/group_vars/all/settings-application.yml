@@ -1,6 +1,10 @@
 ---
 
 settings_application:
+  dconf:
+    debian:
+      - { "key": "/com/ubuntu/sound/allow-amplified-volume", "value": "false" }
+
   gsettings:
     debian:
       - user: dkafetzi

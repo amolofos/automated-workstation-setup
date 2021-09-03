@@ -37,6 +37,8 @@ software:
         - bluez
         - bzip2
         - colortest
+        - dconf-cli
+        - dconf-service
         - diffutils
         - dirmngr
         - gir1.2-gtksource-3.0
