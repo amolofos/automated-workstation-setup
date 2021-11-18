@@ -1,1 +1,28 @@
-ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c52f" RUN+="/bin/sh -c 'echo enabled > /sys/bus/usb/devices/1-3/power/wakeup'"
+# {{ ansible_managed }}
+# https://askubuntu.com/questions/899923/how-to-wake-from-suspend-with-usb-keyboard-16-04-lts
+
+# -----------------------------------------------------------------------------
+# Wake up on usb mouse
+
+# Initial script
+# ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c52f" RUN+="/bin/sh -c 'echo enabled > /sys/bus/usb/devices/1-3/power/wakeup'"
+
+# Latest script
+# 1. Check current setup
+#   grep . /sys/bus/usb/devices/*/power/wakeup
+# 2. Add the commands below in here
+# 3. Restart
+#   systemctl restart udev.service
+#   udevadm trigger
+
+# Enable wakeup on ALL USB hubs (0-99)
+KERNEL=="usb[0-9]|usb[0-9][0-9]", SUBSYSTEM=="usb", DRIVER=="usb", ATTR{power/wakeup}="enabled"
+
+# Enable wakeup for all keyboards
+# Keyboards are HID class 3 protocol 1 devices.
+SUBSYSTEM=="usb", ATTRS{bInterfaceClass}=="03", ATTRS{bInterfaceProtocol}=="01", ATTR{../power/wakeup}="enabled"
+
+# Enable wakeup for all mice (button click, not movement)
+# Mice are HID class 3 protocol 2 devices.
+SUBSYSTEM=="usb", ATTRS{bInterfaceClass}=="03", ATTRS{bInterfaceProtocol}=="02", ATTR{../power/wakeup}="enabled"
+# -----------------------------------------------------------------------------
