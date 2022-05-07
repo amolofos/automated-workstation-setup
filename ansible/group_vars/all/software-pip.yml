@@ -8,6 +8,7 @@ software:
         - pip
         - pipenv
         - psutil
+        - pynvim
         - requests
         - setuptools
         - xmltodict

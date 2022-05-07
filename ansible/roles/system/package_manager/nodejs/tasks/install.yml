@@ -1,0 +1,14 @@
+---
+
+- name: "Install nodejs packages of software for {{ title }}"
+  community.general.npm:
+    name: "{{ package }}"
+    state: "latest"  # noqa package-latest
+    global: yes
+  loop:
+    "{{ packages }}"
+  loop_control:
+    loop_var: package
+  when:
+    - packages is defined
+    - packages | length > 0

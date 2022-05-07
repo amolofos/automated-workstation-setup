@@ -19,3 +19,8 @@
   include: vscode.yml
   when:
     - settings_application.vscode | length > 0
+
+- name: dd application settings with custom commands
+  include: custom.yml
+  when:
+    - settings_application.custom | length > 0

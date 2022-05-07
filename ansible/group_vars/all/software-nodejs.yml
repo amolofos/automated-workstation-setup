@@ -1,0 +1,7 @@
+---
+
+software:
+  nodejs:
+    editors:
+      packages:
+        - neovim

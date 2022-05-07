@@ -92,6 +92,7 @@ software:
         - libreoffice
         - neovim
         - python3-neovim
+        - xsel
     languages:
       packages:
         - firefox-locale-el

@@ -59,7 +59,6 @@ settings_application:
           - { "src": "bashrc_aliases.dkafetzi.j2",        "dest": "/home/dkafetzi/.bashrc.d/.aliases.bashrc",        "mode": '0700' }
           - { "src": "gitconfig.dkafetzi.j2",             "dest": "/home/dkafetzi/.gitconfig",                       "mode": '0700' }
           - { "src": "inputrc.dkafetzi.j2",               "dest": "/home/dkafetzi/.inputrc",                         "mode": '0700' }
-          - { "src": "neovim.init.vim.dkafetzi.j2",       "dest": "/home/dkafetzi/.config/nvim/init.vim",            "mode": '0700' }
           - { "src": "profile.dkafetzi.j2",               "dest": "/home/dkafetzi/.profile",                         "mode": '0700' }
           - { "src": "ssh.config.dkafetzi.j2",            "dest": "/home/dkafetzi/.ssh/config",                      "mode": '0700' }
           - { "src": "vimrc.dkafetzi.j2",                 "dest": "/home/dkafetzi/.vimrc",                           "mode": '0700' }
@@ -68,4 +67,47 @@ settings_application:
   vscode:
     - user: dkafetzi
       extentions:
-        - "ms-azuretools.vscode-docker"
+        - ms-azuretools.vscode-docker
+
+  # Each command should output "Changed" to stdout so the task reports it as changed.
+  custom:
+    debian:
+      - user: dkafetzi
+        commands:
+        # https://github.com/LunarVim/Neovim-from-scratch
+        # If it is not the repository we want, delete everything and clone ours.
+        # If it is the repository we want, clone it.
+        # If there is no repository, delete everything and clone ours.
+        - |
+          if [[ $(cd /home/dkafetzi/.config/nvim; git remote get-url origin 2>/dev/null || true) == "git@github.com:amolofos/Neovim-from-scratch.git" ]]; then
+            cd /home/dkafetzi/.config/nvim
+            git pull origin bugfix/tree-sitter-ensure_installed
+            git checkout bugfix/tree-sitter-ensure_installed
+          else
+            cd /home/dkafetzi/.config/ && rm -rf nvim
+            git clone git@github.com:amolofos/Neovim-from-scratch.git /home/dkafetzi/.config/nvim
+            cd /home/dkafetzi/.config/nvim
+            git checkout bugfix/tree-sitter-ensure_installed
+          fi
+
+        # NerdFonts for neovim
+        # https://www.lunarvim.org/configuration/04-nerd-fonts.html
+        - |
+          mkdir -p /home/dkafetzi/.local/share/fonts
+          cd /home/dkafetzi/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+
+          # And now we want to set the terminal font preferences.
+          # https://askubuntu.com/questions/906137/seriously-dconf-gconf-gsettings-how-do-i-save-my-terminal-settings?noredirect=1&lq=1
+          gprofile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+          gprofile=${gprofile:1:-1}
+          gschema=org.gnome.Terminal.Legacy.Profile
+          gpath=/org/gnome/terminal/legacy/profiles:/:${gprofile}/
+          gsettings list-recursively ${gschema}:${gpath}
+          gsettings set ${gschema}:${gpath} use-system-font false
+          gsettings set ${gschema}:${gpath} font "DroidSansMono Nerd Font 10"
+          gsettings list-recursively ${gschema}:${gpath}
+
+      - user: admin
+        commands:
+          # This is needed for NerdFonts installation. See above.
+          - sudo fc-cache -f -v

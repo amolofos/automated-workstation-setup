@@ -30,6 +30,18 @@
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
+- name: Install nodejs  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/nodejs
+    tasks_from: install
+  vars:
+    packages: "{{ nodejs.value.packages | default([]) }}"
+    title: "{{ nodejs.key | default('') }}"
+  loop:
+    "{{ query('dict', software.nodejs | default({})) }}"
+  loop_control:
+    loop_var: nodejs
+
 - name: Install pip  # noqa fqcn-builtins
   include_role:
     name: system/package_manager/pip

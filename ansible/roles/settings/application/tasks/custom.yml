@@ -1,0 +1,24 @@
+---
+
+# settings_application:
+#   custom:
+#     debian:
+#       - user: dkafetzi
+#         commands:
+#           - echo test
+
+- name: Add application settings with custom commands  # noqa fqcn-builtins
+  register: custom_out
+  become: true
+  become_user: "{{ custom_command.0.user }}"
+  shell: |
+    {{ custom_command.1 }}
+  args:
+    executable: /bin/bash
+    warn: false
+  loop:
+    "{{ settings_application.custom.debian | default([]) | subelements('commands', skip_missing=True) }}"
+  loop_control:
+    loop_var: custom_command
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
