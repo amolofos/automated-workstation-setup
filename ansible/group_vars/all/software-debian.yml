@@ -34,6 +34,8 @@ software:
         - build-essential
         - curl
         # Bluetooth
+        - blueman
+        - pulseaudio-module-bluetooth
         - bluez
         - bzip2
         - colortest
