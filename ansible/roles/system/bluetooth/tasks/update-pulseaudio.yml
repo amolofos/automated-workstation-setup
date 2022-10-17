@@ -1,0 +1,23 @@
+---
+# JBL bluetooth headphones were not working initially.
+# We need to update /etc/pulse/default.pa as per the following article
+# https://www.nielsvandermolen.com/bluetooth-headphones-ubuntu/
+#
+
+- name: Update pulse audio default.pa for module-bluetooth-policy.so
+  ansible.builtin.replace:
+    path: /etc/pulse/default.pa
+    regexp: "^\\.ifexists module-bluetooth-policy\\.so[\\s\\S]*?\\.endif$"
+    replace: |
+      #.ifexists module-bluetooth-policy.so
+      load-module module-bluetooth-policy
+      #.endif
+
+- name: Update pulse audio default.pa for module-bluetooth-discover.so
+  ansible.builtin.replace:
+    path: /etc/pulse/default.pa
+    regexp: "^\\.ifexists module-bluetooth-discover\\.so[\\s\\S]*?\\.endif$"
+    replace: |
+      #.ifexists module-bluetooth-discover.so
+      load-module module-bluetooth-discover
+      #.endif

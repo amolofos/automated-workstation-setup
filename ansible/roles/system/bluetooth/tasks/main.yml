@@ -21,3 +21,8 @@
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     - bluetooth_out.stdout | int > 0
+
+- include: update-pulseaudio.yml
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - bluetooth_out.stdout | int > 0
