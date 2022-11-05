@@ -15,6 +15,10 @@ log ""
 
 oldPwd=`pwd`
 
+log `pwd`
+log `ls -la`
+log `tree`
+
 cd ansible/
 # Just delete any caching directory.
 fact_caching_connection=`grep -E "^fact_caching_connection *=" ./ansible.cfg | sed 's/fact_caching_connection=//g'`

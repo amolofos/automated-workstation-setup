@@ -79,6 +79,10 @@ log ""
 
 oldPwd=`pwd`
 
+log `pwd`
+log `ls -la`
+log `tree`
+
 if [ -f "./scripts/add-cronjob-debian.sh" ]; then
 	cmd=(sudo -iu admin sh -c "cd $oldPwd; ./scripts/add-cronjob-debian.sh")
 
