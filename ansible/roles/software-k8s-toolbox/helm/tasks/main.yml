@@ -1,0 +1,38 @@
+---
+- name: Ensure helm directories are created
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ helm_cache_path }}"
+    - "{{ helm_installation_path }}"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Ensure helm is installed
+  get_url:
+    url: "{{ source_url }}/{{ asset_name }}"
+    dest: "{{ helm_cache_path }}"
+    checksum: "{{ helm_checksum }}"
+    mode: "0755"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Unarchive helm archive into helm_installation_path
+  unarchive:
+    src: "{{ helm_cache_path }}/{{ asset_name }}"
+    dest: "{{ helm_installation_path }}"
+    remote_src: true
+    mode: "0755"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Ensure helm link is created
+  file:
+    src: "{{ helm_installation_path }}/{{ platform_name }}/{{ binary_name }}"
+    dest: "/usr/local/bin/{{ binary_name }}"
+    state: link
+    force: true
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

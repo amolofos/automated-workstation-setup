@@ -7,3 +7,4 @@ users:
     groups: "docker,sudo"
   admin:
     name: "Admin"
+    groups: "docker,sudo"

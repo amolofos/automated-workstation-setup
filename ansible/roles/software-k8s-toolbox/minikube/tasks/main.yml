@@ -1,0 +1,8 @@
+---
+
+- name: Ensure minikube is installed
+  apt:
+    deb: "https://storage.googleapis.com/minikube/releases/v{{ minikube_version }}/minikube_{{ minikube_version }}-0_amd64.deb"
+    state: present
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

@@ -7,6 +7,8 @@
   hosts: all
   roles:
 
+    - role: utils/are_we_in_docker
+
     - role: system/user
       when:
         - users is defined

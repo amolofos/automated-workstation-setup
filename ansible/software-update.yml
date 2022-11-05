@@ -4,6 +4,8 @@
   hosts: all
   roles:
 
+    - role: utils/are_we_in_docker
+
     - role: software
       vars:
         state: upgrade

@@ -1,0 +1,8 @@
+---
+are_we_in_docker: false
+
+# https://github.com/helm/helm
+helm_cache_path: "/var/cache/github"
+helm_installation_path: "/opt/github/helm"
+helm_checksum: ""
+helm_version: "v3.10.1"
