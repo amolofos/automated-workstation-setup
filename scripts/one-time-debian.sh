@@ -83,6 +83,11 @@ log `pwd`
 log `ls -la`
 log `tree`
 
+# Hack for github actions.
+if [ -f "/home/runner/work/automated-workstation-setup/automated-workstation-setup/" ]; then
+	sudo chown admin:admin /home/runner/work/automated-workstation-setup/automated-workstation-setup
+fi
+
 if [ -f "./scripts/add-cronjob-debian.sh" ]; then
 	cmd=(sudo -iu admin sh -c "cd $oldPwd; ./scripts/add-cronjob-debian.sh")
 
