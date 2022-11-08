@@ -20,3 +20,4 @@
     - "'is already installed.' not in vscode_out.stdout or 'was successfully installed' in vscode_out.stdout"
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - not are_we_in_docker

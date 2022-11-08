@@ -23,6 +23,12 @@ if [ -d $fact_caching_connection ]; then
 	sudo rm -rf $fact_caching_connection
 fi
 
+# Prerequisites
+cmd=(ansible-galaxy collection install community.docker)
+log "In directory: `pwd`."
+log "Executing: ${cmd[*]}"
+"${cmd[@]}"
+
 # Run ansible
 cmd=(ansible-playbook -b -u admin 00-add-cronjob.yml)
 log "In directory: `pwd`."

@@ -15,6 +15,13 @@
 
     - role: software
       vars:
+        state: install_latest
+        cache_valid_time: "{{ package_manager.cache_valid_time }}"
+      when:
+        - software is defined
+
+    - role: software
+      vars:
         state: configure_alternative
       when:
         - software is defined

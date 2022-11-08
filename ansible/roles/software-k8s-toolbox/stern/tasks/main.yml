@@ -1,0 +1,34 @@
+---
+- name: Ensure stern directories are created
+  file:
+    path: "{{ stern_installation_path }}"
+    state: directory
+    mode: "0755"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Ensure stern is installed
+  get_url:
+    url: "{{ source_url }}/{{ github_namespace }}/releases/download/{{ stern_version }}/{{ asset_name }}"
+    dest: "{{ stern_cache_path }}"
+    checksum: "{{ stern_checksum }}"
+    mode: "0755"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Unarchive stern archive into stern_installation_path
+  unarchive:
+    src: "{{ stern_cache_path }}/{{ asset_name }}"
+    dest: "{{ stern_installation_path }}"
+    remote_src: true
+    mode: "0755"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Ensure stern link is created
+  file:
+    src: "{{ stern_installation_path }}/{{ binary_name }}"
+    dest: "/usr/local/bin/{{ binary_name }}"
+    state: link
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

@@ -56,3 +56,6 @@
     - "'Changed' in custom_out.stdout"
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install k8s
+  include: install_k8s.yml

@@ -1,0 +1,6 @@
+---
+# https://github.com/wercker/stern
+stern_cache_path: "/var/cache/github"
+stern_installation_path: "/opt/github/stern"
+stern_checksum: ""
+stern_version: "v1.22.0"

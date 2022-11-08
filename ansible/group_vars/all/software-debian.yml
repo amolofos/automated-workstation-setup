@@ -30,7 +30,9 @@ software:
       packages:
         - ansible
         - apt-file
+        - apt-transport-https
         - apt-utils
+        - bash-completion
         - build-essential
         - curl
         # Bluetooth
@@ -114,11 +116,15 @@ software:
         - "https://packages.microsoft.com/keys/microsoft.asc"
         # Docker
         - "https://download.docker.com/linux/ubuntu/gpg"
+        # K8s
+        - "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
       repositories:
         # VSCode
         - "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
         # Docker
         - "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        # K8s
+        - "deb https://apt.kubernetes.io/ kubernetes-xenial main"
       packages:
         - ansible-lint
         - autoconf
@@ -187,6 +193,9 @@ software:
   custom:
     # Should we create a role to install the latest go version?
     - "if [ ! -d /usr/local/go ] || [ \"`/usr/local/go/bin/go version | grep go1.17 | wc -l`\" -eq 0 ]; then sudo rm -rf /usr/local/go && wget --quiet https://dl.google.com/go/go1.17.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local; echo Changed; fi"
+
+    # Just add admin to the docker group
+    - "usermod -aG docker admin"
 
   alternatives:
     debian:
