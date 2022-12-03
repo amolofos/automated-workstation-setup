@@ -27,8 +27,6 @@ software:
         - https://dl-ssl.google.com/linux/linux_signing_key.pub
       repositories:
         - "ppa:ansible/ansible"
-        # https://askubuntu.com/questions/1036195/bluetooth-doesnt-work-after-resuming-from-sleep-ubuntu-18-04-lts
-        - "ppa:bluetooth/bluez"
       packages:
         - ansible
         - apt-file
