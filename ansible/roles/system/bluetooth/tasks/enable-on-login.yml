@@ -36,7 +36,7 @@
 - name: Make bluetooth working after sleep
   ansible.builtin.template:
     src: "lib.systemd.system-sleep.bluetooth.j2"
-    dest: "/lib/systemd/system-sleep/bluetooth"
+    dest: "/lib/systemd/system-sleep/bt"
     owner: "root"
     group: "root"
     mode: "0755"
