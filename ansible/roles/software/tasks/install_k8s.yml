@@ -1,5 +1,15 @@
 ---
 
+- name: Install pyOpenSSL  # noqa fqcn-builtins
+  include_role:
+    name: system/package_manager/pip
+    tasks_from: install
+  vars:
+    packages: [ "pyOpenSSL" ]
+    title: "k8s"
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
 - name: Install minikube
   include_role:
     name: software-k8s-toolbox/minikube
