@@ -4,6 +4,7 @@
   ansible.builtin.pip:
     name: "{{ packages | list }}"
     state: "latest"  # noqa package-latest
+    extra_args: "--ignore-installed"
   when:
     - packages is defined
     - packages | length > 0
