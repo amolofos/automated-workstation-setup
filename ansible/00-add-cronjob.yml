@@ -1,9 +1,0 @@
----
-
-- import_playbook: tools-gather_facts.yml
-
-- name: Setup software
-  hosts: all
-  roles:
-
-    - role: admin_cronjob

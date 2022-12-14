@@ -1,6 +1,0 @@
----
-
-initramfs_modules:
-  - bluetooth
-
-are_we_in_docker: false

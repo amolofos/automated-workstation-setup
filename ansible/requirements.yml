@@ -1,0 +1,10 @@
+---
+
+collections:
+
+  - community.docker
+
+  - name: amolofos.ansible_collection_workstation
+    type: git
+    source: "https://github.com/amolofos/ansible_collection_workstation.git"
+    version: "feature/re-structure"

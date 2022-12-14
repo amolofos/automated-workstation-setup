@@ -2,14 +2,23 @@
 #
 # It is expected to be run by root or any other privileged user.
 #
+# This script should not depend on any other ones. The user must be
+# able to run it without the need to checkout the entiry codebase first.
+#
 set -ueo pipefail
 
-ADMIN_USERNAME=admin
-ADMIN_GROUP=admin
+export ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+export ADMIN_GROUP=${ADMIN_GROUP:-admin}
 
-DEBIAN_FRONTEND=noninteractive
-REPOSITORY_BRANCH=${GIT_BRANCH:-main}
-REPOSITORY=${REPOSITORY:-https://github.com/amolofos/automated-workstation-setup.git}
+export BASE_DIR=${BASE_DIR:-/opt/automated-workstation}
+export APP_DIR=${APP_DIR:-/opt/automated-workstation/app}
+
+export REPOSITORY_BRANCH=${GIT_BRANCH:-main}
+export REPOSITORY=${REPOSITORY:-https://github.com/amolofos/automated-workstation-setup.git}
+
+export PYTHON_VERSION=${PYTHON_VERSION:-python3}
+export PYTHON_PIP_VERSION=${PYTHON_PIP_VERSION:-pip3}
+export ANSIBLE_COLLECTIONS_PATH="~/.ansible/collections"
 
 log() {
 	echo "`date +"%Y-%m-%d %H:%M:%S"`: $1"
@@ -30,7 +39,7 @@ echo ""
 
 if [ "$(id -u)" -eq "0" ]; then
 	log "Installing sudo"
-	apt-get update -qq >/dev/null 2>&1 && apt-get install --yes sudo >/dev/null 2>&1 || true
+	apt-get update -qq && apt-get install --yes sudo || true
 fi
 
 if ! command -v sudo >/dev/null 2>&1; then
@@ -43,7 +52,7 @@ log "Create $ADMIN_GROUP group."
 sudo groupadd --system --force $ADMIN_GROUP
 
 log "Set $ADMIN_GROUP group as passwordless sudo."
-echo "# `date +"%Y-%m-%d %H:%M:%S"`"         >  /tmp/99-admin-passwordless.new
+echo "# `date +"%Y-%m-%d %H:%M:%S"`"                 >  /tmp/99-admin-passwordless.new
 echo "# Give $ADMIN_GROUP group passwordless sudo." >> /tmp/99-admin-passwordless.new
 echo "%$ADMIN_GROUP  ALL=(ALL) NOPASSWD:ALL"        >> /tmp/99-admin-passwordless.new
 visudo --check --quiet --strict -f /tmp/99-admin-passwordless.new
@@ -51,21 +60,27 @@ sudo EDITOR="cp /tmp/99-admin-passwordless.new" visudo -f /etc/sudoers.d/99-admi
 rm -f /tmp/99-admin-passwordless.new
 
 log "Create $ADMIN_USERNAME system user."
-id -u $ADMIN_USERNAME >/dev/null 2>&1 || sudo useradd --system --create-home --gid $ADMIN_GROUP $ADMIN_USERNAME
+id -u $ADMIN_USERNAME >/dev/null 2>&1 || sudo useradd --create-home -s /bin/bash --gid $ADMIN_GROUP $ADMIN_USERNAME
 sudo usermod -a -G '' admin
+sudo touch /home/$ADMIN_USERNAME/.sudo_as_admin_successful
 
-log "Installing software-properties-common"
-sudo apt-get update -qq >/dev/null 2>&1 && \
-	sudo apt-get install -qq --yes --no-install-recommends software-properties-common
+log "Installing software-properties-common and gpg"
+sudo apt-get update -qq
+sudo apt-get install -qq --yes --no-install-recommends \
+	software-properties-common \
+	gpg \
+	gpg-agent \
+	rng-tools
 
-log "Installing python 3.8 and ansible"
+log "Installing python and git"
 sudo add-apt-repository --yes ppa:deadsnakes/ppa
 sudo apt-add-repository --yes ppa:ansible/ansible
-sudo apt-get update -qq >/dev/null 2>&1 && \
-	sudo apt-get install -qq --yes --no-install-recommends ansible git python3.8 python3-apt
-
-log "Installing GPG"
-sudo apt-get install -qq --yes --no-install-recommends gpg gpg-agent rng-tools
+sudo apt-get update -qq
+sudo apt-get install -qq --yes --no-install-recommends \
+	git \
+	python3-apt \
+	${PYTHON_VERSION} \
+	${PYTHON_VERSION}-venv
 
 log "Installing a crontab to $ADMIN_USERNAME user."
 log "This will:"
@@ -78,30 +93,40 @@ log " the scheduled-debian.sh script."
 log ""
 
 oldPwd=`pwd`
+oldUser=`whoami`
 
-if [ -f "./scripts/add-cronjob-debian.sh" ]; then
-	cmd=(sudo -iu admin sh -c "cd $oldPwd; ./scripts/add-cronjob-debian.sh")
+sudo chown -R $ADMIN_USERNAME:$ADMIN_GROUP $BASE_DIR;
 
-	# Just delete any caching directory.
-	fact_caching_connection=`grep -E "^fact_caching_connection *=" ./ansible/ansible.cfg | sed 's/fact_caching_connection=//g'`
-	if [ -d $fact_caching_connection ]; then
-		log "Removing $fact_caching_connection directory."
-		sudo rm -rf $fact_caching_connection
-	fi
-	sudo chown admin:admin ansible/
+if [ -f "$APP_DIR/scripts/add-cronjob-debian.sh" ]; then
+	cmd() {
+		log "In directory: `pwd`."
+		log "Executing: sudo -u $ADMIN_USERNAME sh -c '$APP_DIR/scripts/add-cronjob-debian.sh'"
+
+		sudo -u $ADMIN_USERNAME sh -c "
+			$APP_DIR/scripts/add-cronjob-debian.sh;
+		"
+	}
+
+	cmd
 
 else
-	cmd=(sudo -iu admin sh -c "rm -rf /tmp/amolofos-automated-workstation-setup-tmp/ && \
-		git clone --quiet --branch $REPOSITORY_BRANCH $REPOSITORY --depth 1 /tmp/amolofos-automated-workstation-setup-tmp/ && \
-		cd /tmp/amolofos-automated-workstation-setup-tmp/ && \
-		./scripts/add-cronjob-debian.sh && \
-		cd /tmp \
-		&& rm -rf /tmp/amolofos-automated-workstation-setup-tmp/ \
-	")
-fi
+	sudo mkdir -p $APP_DIR
+	sudo chown -R $ADMIN_USERNAME:$ADMIN_GROUP $BASE_DIR
 
-log "In directory: `pwd`."
-log "Executing: ${cmd[*]}"
-"${cmd[@]}"
+	cmd() {
+		sudo -iu admin sh -c "
+			rm -rf $APP_DIR &&
+				git clone --quiet --branch $REPOSITORY_BRANCH $REPOSITORY --depth 1 $APP_DIR &&
+				cd $APP_DIR &&
+				$APP_DIR/scripts/add-cronjob-debian.sh &&
+				cd $HOME &&
+				rm -rf $APP_DIR
+		"
+	}
+
+	log "In directory: `pwd`."
+	log "Executing: $APP_DIR/scripts/add-cronjob-debian.sh"
+	cmd
+fi
 
 log "Finished successfully."

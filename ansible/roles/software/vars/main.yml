@@ -1,8 +1,0 @@
----
-
-state_valid_options:
-  - cleanup
-  - configure_alternative
-  - install_latest
-  - update_cache
-  - upgrade

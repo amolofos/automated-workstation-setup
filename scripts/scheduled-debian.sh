@@ -4,9 +4,12 @@
 #
 set -ueo pipefail
 
-log() {
-	echo "`date +"%Y-%m-%d %H:%M:%S"`: $1"
-}
+export ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+
+export APP_DIR=${APP_DIR:-/opt/automated-workstation/app}
+export VENV_DIR=${VENV_DIR:-/opt/automated-workstation/.venv}
+
+. $APP_DIR/scripts/setup-env.sh
 
 log ""
 log "---------------------------"
@@ -15,29 +18,18 @@ log ""
 
 oldPwd=`pwd`
 
-cd ansible/
-# Just delete any caching directory.
-fact_caching_connection=`grep -E "^fact_caching_connection *=" ./ansible.cfg | sed 's/fact_caching_connection=//g'`
-if [ -d $fact_caching_connection ]; then
-	log "Removing $fact_caching_connection directory."
-	sudo rm -rf $fact_caching_connection
-fi
-
-# Prerequisites
-cmd=(ansible-galaxy collection install community.docker)
-log "In directory: `pwd`."
-log "Executing: ${cmd[*]}"
-"${cmd[@]}"
+. $APP_DIR/scripts/add-cronjob-debian.sh
 
 # Run ansible
-cmd=(ansible-playbook -b -u admin 00-add-cronjob.yml)
-log "In directory: `pwd`."
-log "Executing: ${cmd[*]}"
-"${cmd[@]}"
+run_ansible() {
+	. $VENV_DIR/bin/activate
 
-cmd=(ansible-playbook -b -u admin 01-provision-all.yml)
-log "In directory: `pwd`."
-log "Executing: ${cmd[*]}"
-"${cmd[@]}"
+	cd $APP_DIR/ansible
+	log "In directory: `pwd`."
+	log "Executing: ansible-playbook -b -u $ADMIN_USERNAME amolofos.ansible_collection_workstation.p01_provision_all"
+	ansible-playbook -b -u $ADMIN_USERNAME amolofos.ansible_collection_workstation.p01_provision_all
+}
+
+run_ansible
 
 cd $oldPwd

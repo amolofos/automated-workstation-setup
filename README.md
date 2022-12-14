@@ -1,6 +1,6 @@
 # Overview
 
-This is an effort to provide scripts to setup my workstation in an automated, reproducible way.
+This is an effort to provide scripts to setup my workstation in an automated, reproducible way. The scripts are meant to be generic and parameterised based on the provided group_vars.
 
 ## Status
 [![ubuntu-ci status](https://github.com/amolofos/automated-workstation-setup/workflows/ubuntu-ci/badge.svg)](https://github.com/amolofos/automated-workstation-setup/actions)
