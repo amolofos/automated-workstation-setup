@@ -1,8 +1,0 @@
----
-
-- name: "Add repository for {{ title | default('') }}"
-  ansible.builtin.apt_repository:
-    repo: "{{ repo }}"
-    state: "{{ state }}"
-    update_cache: true
-    validate_certs: false

@@ -19,13 +19,16 @@ on:
 
 jobs:
 
-  test:
-    name: Test on docker
+  test_end_to_end:
+    name: Test on various OSes
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+
     strategy:
+      fail-fast: true
       matrix:
-        os: [ubuntu-20.04]
+        os: ["ubuntu-20.04", 'ubuntu-22.04']
+        python: ["python3.7", "python3.8", "python3.9", "python3.10"]
 
     steps:
       - uses: actions/checkout@v2
@@ -37,5 +40,27 @@ jobs:
           GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
 
-      - name: Build
-        run: ./docker-entrypoint.sh
+          echo "REPOSITORY=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+
+      - name: Build docker image
+        run: >
+          docker build \
+            -t automation:${{ matrix.os }} \
+            -f docker/Dockerfile.${{ matrix.os }} \
+            .
+
+      - name: End to end test using locally checkedout code
+        run: >
+          docker run automation:${{ matrix.os }} \
+            -e GIT_BRANCH=$GIT_BRANCH \
+            -e REPOSITORY=$REPOSITORY \
+            -e PYTHON_VERSION=${{ matrix.python }}
+
+      - name: End to end test with code fetch from remote
+        run: >
+          docker run automation:${{ matrix.os }} \
+            -e GIT_BRANCH=$GIT_BRANCH \
+            -e REPOSITORY=$REPOSITORY \
+            -e PYTHON_VERSION=${{ matrix.python }} \
+            rm -f /opt/automated-workstation/app/scripts/add-cronjob-debian.sh && \
+            /opt/docker/docker-entrypoint.sh

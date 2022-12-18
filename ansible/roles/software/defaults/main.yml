@@ -1,9 +1,0 @@
----
-
-cache_valid_time: 1500
-
-rancher_version: "v2.7-head"
-rancher_exposed_ports:
-  - "8100:8080"
-
-helm_installed_bin_path: "/usr/local/bin/helm"

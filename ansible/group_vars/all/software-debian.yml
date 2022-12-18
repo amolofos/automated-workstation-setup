@@ -168,6 +168,10 @@ software:
         - python3.9-dev
         - python3.9-distutils
         - python3.9-venv
+        - python3.10
+        - python3.10-dev
+        - python3.10-distutils
+        - python3.10-venv
         - python3-apt
         - python3-pip
     media:
@@ -189,7 +193,7 @@ software:
         - xmltodict
         - yamllint
 
-# Each command should output "Changed" to stdout so the task reports it as changed.
+  # Each command should output "Changed" to stdout so the task reports it as changed. yaml[line-length]
   custom:
     # Should we create a role to install the latest go version?
     - "if [ ! -d /usr/local/go ] || [ \"`/usr/local/go/bin/go version | grep go1.17 | wc -l`\" -eq 0 ]; then sudo rm -rf /usr/local/go && wget --quiet https://dl.google.com/go/go1.17.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local; echo Changed; fi"
@@ -209,6 +213,10 @@ software:
         priority: 1000
       - name: "python"
         path: "/usr/bin/python3.8"
+        link: "/usr/bin/python"
+        priority: 1000
+      - name: "python"
+        path: "/usr/bin/python3.9"
         link: "/usr/bin/python"
         priority: 1000
       - name: "vi"

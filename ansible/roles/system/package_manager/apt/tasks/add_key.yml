@@ -1,6 +1,0 @@
----
-
-- name: "Install key for {{ title | default('') }}"
-  ansible.builtin.apt_key:
-    url: "{{ url }}"
-    state: "{{ state }}"
