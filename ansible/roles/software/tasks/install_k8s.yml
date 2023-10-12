@@ -30,13 +30,14 @@
   when:
     - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Install rancher
-  community.docker.docker_container:
-    name: rancher-server
-    image: "rancher/rancher:{{ rancher_version }}"
-    state: started
-    detach: true
-    published_ports: "{{ rancher_exposed_ports }}"
-    pull: true
-    restart: true
-    restart_policy: "unless-stopped"
+# It fails, so disable it for now.
+#- name: Install rancher
+#  community.docker.docker_container:
+#    name: rancher-server
+#    image: "rancher/rancher:{{ rancher_version }}"
+#    state: started
+#    detach: true
+#    published_ports: "{{ rancher_exposed_ports }}"
+#    pull: true
+#    restart: true
+#    restart_policy: "unless-stopped"
